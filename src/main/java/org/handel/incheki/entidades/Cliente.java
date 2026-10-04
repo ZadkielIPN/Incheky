@@ -16,9 +16,9 @@ import org.handel.incheki.enums.NivelLealtad;
 @PrimaryKeyJoinColumn(name = "id")
 public class Cliente extends Usuario {
 
-    @Min(value = 0, message = "El precio mínimo permitido es 0")
+    @Min(value = 0, message = "Los puntos mínimos permitidos son 0")
     @Column(nullable = false)
-    private Double puntos;
+    private Integer puntos;
 
     @Column(nullable = false, name = "nivel_lealtad")
     @Enumerated(EnumType.STRING)

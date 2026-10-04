@@ -8,7 +8,7 @@ import lombok.Getter;
 public enum Rol {
     CLIENTE("Cliente"),
     ADMINISTRADOR("Administrador"),
-    CAJERO("Cajero"),;
+    CAJERO("Cajero");
 
     private final String descripcion;
 }

@@ -14,12 +14,11 @@ import org.handel.incheki.enums.Turno;
 @PrimaryKeyJoinColumn(name = "id")
 public class Cajero extends Usuario {
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, name = "numero_empleado", unique = true)
     private Long numeroEmpleado;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Turno turno;
 
     @Column(name = "caja_asignada")

@@ -14,7 +14,7 @@ import org.handel.incheki.enums.NivelAcceso;
 @PrimaryKeyJoinColumn(name = "id")
 public class Administrador extends Usuario {
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(nullable = false, name = "numero_administrador", unique = true)
     private Long numeroAdministrador;
 
