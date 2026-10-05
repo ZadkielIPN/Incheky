@@ -1,9 +1,9 @@
 package org.handel.incheki.entidades;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.handel.incheki.enums.NivelAcceso;
 
 @Entity
 @Getter @Setter
@@ -14,12 +14,8 @@ import org.handel.incheki.enums.NivelAcceso;
 @PrimaryKeyJoinColumn(name = "id")
 public class Administrador extends Usuario {
 
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @NotNull
     @Column(nullable = false, name = "numero_administrador", unique = true)
     private Long numeroAdministrador;
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private NivelAcceso nivelAcceso;
 }
 
