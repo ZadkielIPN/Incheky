@@ -8,17 +8,10 @@ import java.math.BigDecimal;
 @Getter
 @AllArgsConstructor
 public enum NivelLealtad {
-    BRONCE(0),
-    PLATA(5),
-    ORO(10);
+    BRONCE("Bronce", BigDecimal.ZERO),
+    PLATA("Plata", BigDecimal.valueOf(5)),
+    ORO("Oro", BigDecimal.TEN);
 
+    private final String descripcion;
     private final BigDecimal descuentoPorcentaje;
-
-    NivelLealtad(int descuentoPorcentaje) {
-        this.descuentoPorcentaje = BigDecimal.valueOf(descuentoPorcentaje);
-    }
-
-    public BigDecimal getDescuentoPorcentaje() {
-        return descuentoPorcentaje;
-    }
 }

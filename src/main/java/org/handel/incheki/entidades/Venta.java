@@ -5,6 +5,7 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.handel.incheki.enums.MetodoPago;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -58,4 +59,9 @@ public class Venta {
     @Min(0)
     @Column(nullable = false, name = "puntos_ganados")
     private Integer puntosGanados = 0;
+
+    @NotNull
+    @Column(nullable = false, name = "metodo_pago")
+    @Enumerated(EnumType.STRING)
+    private MetodoPago metodoPago;
 }

@@ -8,7 +8,7 @@ import lombok.Getter;
 public enum Turno {
     MATUTINO("Matutino"),
     VESPERTINO("Vespertino"),
-    NOCTURNO("Nocturno"),;
+    NOCTURNO("Nocturno");
 
     private final String descripcion;
 }
