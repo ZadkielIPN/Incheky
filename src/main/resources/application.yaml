@@ -1,3 +1,22 @@
 spring:
   application:
-    name: Incheki
+    name: Incheky
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/incheky_db
+    username: root
+    password: "MySql@ZBD101709"
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  sql:
+    init:
+      mode: always
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    open-in-view: false
+
+server:
+  port: 8080
