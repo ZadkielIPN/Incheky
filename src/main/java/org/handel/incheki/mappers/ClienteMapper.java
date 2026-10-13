@@ -2,7 +2,7 @@ package org.handel.incheki.mappers;
 
 import org.handel.incheki.dtos.request.ClienteRequest;
 import org.handel.incheki.dtos.response.ClienteResponse;
-import org.handel.incheki.entidades.Cliente;
+import org.handel.incheki.entities.Cliente;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Builder;
 import org.mapstruct.Mapper;

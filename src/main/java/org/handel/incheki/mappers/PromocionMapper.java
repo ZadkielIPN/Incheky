@@ -2,7 +2,7 @@ package org.handel.incheki.mappers;
 
 import org.handel.incheki.dtos.request.PromocionRequest;
 import org.handel.incheki.dtos.response.PromocionResponse;
-import org.handel.incheki.entidades.Promocion;
+import org.handel.incheki.entities.Promocion;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

@@ -1,10 +1,10 @@
 package org.handel.incheki.mappers;
 
-import org.handel.incheki.entidades.Cajero;
-import org.handel.incheki.entidades.Cliente;
-import org.handel.incheki.entidades.Producto;
-import org.handel.incheki.entidades.Promocion;
-import org.handel.incheki.entidades.Proveedor;
+import org.handel.incheki.entities.Cajero;
+import org.handel.incheki.entities.Cliente;
+import org.handel.incheki.entities.Producto;
+import org.handel.incheki.entities.Promocion;
+import org.handel.incheki.entities.Proveedor;
 import org.mapstruct.Named;
 import org.springframework.stereotype.Component;
 

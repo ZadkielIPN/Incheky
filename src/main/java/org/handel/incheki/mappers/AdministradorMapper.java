@@ -2,11 +2,8 @@ package org.handel.incheki.mappers;
 
 import org.handel.incheki.dtos.request.AdministradorRequest;
 import org.handel.incheki.dtos.response.AdministradorResponse;
-import org.handel.incheki.entidades.Administrador;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Builder;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.handel.incheki.entities.Administrador;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface AdministradorMapper {
@@ -16,4 +13,8 @@ public interface AdministradorMapper {
     Administrador toEntity(AdministradorRequest request);
 
     AdministradorResponse toResponse(Administrador entity);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "rol", ignore = true)
+    void update(AdministradorRequest request, @MappingTarget Administrador administrador);
 }

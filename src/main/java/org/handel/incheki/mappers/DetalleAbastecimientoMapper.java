@@ -2,7 +2,7 @@ package org.handel.incheki.mappers;
 
 import org.handel.incheki.dtos.request.DetalleAbastecimientoRequest;
 import org.handel.incheki.dtos.response.DetalleAbastecimientoResponse;
-import org.handel.incheki.entidades.DetalleAbastecimiento;
+import org.handel.incheki.entities.DetalleAbastecimiento;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
