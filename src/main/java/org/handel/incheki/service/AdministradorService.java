@@ -1,4 +1,4 @@
-package org.handel.incheki.services;
+package org.handel.incheki.service;
 
 import org.handel.incheki.dtos.request.AdministradorRequest;
 import org.handel.incheki.dtos.response.AdministradorResponse;

@@ -1,0 +1,1 @@
+insert into usuarios(apellido, contrasena, email, nombre, rol) values ('Doe', 'password123', 'john.doe@example.com', 'John', 'USUARIO')

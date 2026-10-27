@@ -1,4 +1,4 @@
-package org.handel.incheki.entities;
+package org.handel.incheki.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;

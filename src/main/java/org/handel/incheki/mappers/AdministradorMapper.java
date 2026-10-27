@@ -2,7 +2,7 @@ package org.handel.incheki.mappers;
 
 import org.handel.incheki.dtos.request.AdministradorRequest;
 import org.handel.incheki.dtos.response.AdministradorResponse;
-import org.handel.incheki.entities.Administrador;
+import org.handel.incheki.model.Administrador;
 import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")

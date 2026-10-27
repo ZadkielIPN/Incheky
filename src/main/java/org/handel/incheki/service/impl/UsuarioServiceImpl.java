@@ -1,14 +1,14 @@
-package org.handel.incheki.services.impl;
+package org.handel.incheki.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.handel.incheki.dtos.UsuarioSession;
 import org.handel.incheki.dtos.response.UsuarioResponse;
-import org.handel.incheki.entities.Usuario;
+import org.handel.incheki.model.Usuario;
 import org.handel.incheki.enums.Rol;
 import org.handel.incheki.exceptions.ResourcesNotFoundException;
 import org.handel.incheki.mappers.UsuarioMapper;
 import org.handel.incheki.repository.UsuarioRepository;
-import org.handel.incheki.services.UsuarioService;
+import org.handel.incheki.service.UsuarioService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

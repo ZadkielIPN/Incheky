@@ -1,16 +1,16 @@
-package org.handel.incheki.services.impl;
+package org.handel.incheki.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.handel.incheki.dtos.request.AdministradorRequest;
 import org.handel.incheki.dtos.response.AdministradorResponse;
-import org.handel.incheki.entities.Administrador;
+import org.handel.incheki.model.Administrador;
 import org.handel.incheki.enums.Rol;
 import org.handel.incheki.exceptions.EmailDuplicadoException;
 import org.handel.incheki.exceptions.ResourcesNotFoundException;
 import org.handel.incheki.mappers.AdministradorMapper;
 import org.handel.incheki.repository.AdministradorRepository;
 import org.handel.incheki.repository.UsuarioRepository;
-import org.handel.incheki.services.AdministradorService;
+import org.handel.incheki.service.AdministradorService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Incheky | Método no permitido</title>
+    <link rel="stylesheet" th:href="@{/css/incheky.css}">
+</head>
+<body>
+<main class="container section">
+    <div class="empty">
+        <h1>405</h1>
+        <h2>Método no permitido</h2>
+        <p th:text="${mensaje}">La operación solicitada no está permitida.</p>
+        <a class="btn" th:href="@{/}">Volver al inicio</a>
+    </div>
+</main>
+</body>
+</html>

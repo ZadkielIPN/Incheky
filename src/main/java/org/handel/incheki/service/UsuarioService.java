@@ -1,4 +1,4 @@
-package org.handel.incheki.services;
+package org.handel.incheki.service;
 
 import org.handel.incheki.dtos.UsuarioSession;
 import org.handel.incheki.dtos.response.UsuarioResponse;

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Incheky | Tienda</title>
+    <link rel="stylesheet" th:href="@{/css/incheky.css}">
+    <link rel="icon" type="image/svg+xml" sizes="32x32" th:href="@{/img/favicon.svg}">
+</head>
+<body>
+<header th:replace="~{fragments/layout :: header('store')}"></header>
+<main>
+    <section class="hero">
+        <div class="container"><p>Bienvenido a</p>
+            <h1>Incheky</h1>
+            <p>Productos frescos y de calidad para tu hogar. Compra hoy y ahorra.</p>
+            <p>★★★★★ <span>4.8 · Más de 500 clientes satisfechos</span></p></div>
+    </section>
+    <div class="info">
+        <div class="container"><span>📍 Calle Morelos 45, Col. Centro</span><span>☎ 555-123-4567</span><span>🟢 Abierto · Lun–Sáb 7am–9pm</span>
+        </div>
+    </div>
+    <section class="container section">
+        <div class="section-head">
+            <div><h2>Productos disponibles</h2>
+                <p class="muted" th:text="${#lists.size(productos)} + ' productos encontrados'"></p></div>
+            <form class="search" method="get" th:action="@{/}">
+                <input name="q" th:value="${busqueda}" placeholder="Buscar productos...">
+                <button class="btn">Buscar</button>
+            </form>
+        </div>
+        <div th:if="${#lists.isEmpty(productos)}" class="empty">No se encontraron productos.</div>
+        <div class="grid" th:if="${not #lists.isEmpty(productos)}">
+            <article class="card" th:each="producto : ${productos}">
+                <img class="product-img"
+                     src="https://images.unsplash.com/photo-1601600576337-c1d8a0d1373c?auto=format&amp;fit=crop&amp;w=500&amp;q=80"
+                     th:alt="${producto.nombre}">
+                <div class="card-body"><span class="tag" th:text="${producto.unidadMedida}">Unidad</span>
+                    <h3 th:text="${producto.nombre}">Producto</h3>
+                    <p class="muted" th:text="${producto.descripcion}">Descripción</p>
+                    <p>
+                        <span class="price" th:text="'$' + ${#numbers.formatDecimal(producto.precio,1,2)}">$0.00</span>
+                        <span class="muted" th:text="' · Stock: ' + ${producto.stock}"></span>
+                    </p>
+                </div>
+            </article>
+        </div>
+    </section>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>
