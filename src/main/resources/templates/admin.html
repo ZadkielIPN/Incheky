@@ -11,8 +11,10 @@
 <header th:replace="~{fragments/layout :: header('admin')}"></header>
 <main class="container section">
     <div class="section-head">
-        <div><h1>Panel de administración</h1>
-            <p class="muted">Registra administradores y consulta el directorio.</p></div>
+        <div>
+            <h1>Panel de administración</h1>
+            <p class="muted">Registra administradores y consulta el directorio.</p>
+        </div>
     </div>
     <div class="notice" th:if="${mensaje}" th:text="${mensaje}"></div>
     <div class="notice error" th:if="${error}" th:text="${error}"></div>

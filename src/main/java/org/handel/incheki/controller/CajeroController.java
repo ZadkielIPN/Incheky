@@ -22,33 +22,33 @@ public class CajeroController {
     final AdministradorService cajeroService;
 
     @GetMapping("/{id}")
-    public String mostrarPorId(@PathVariable Long id, Model modelo) {
+    public String showById(@PathVariable Long id, Model modelo) {
         AdministradorResponse respuestaDto = cajeroService.findById(id);
         modelo.addAttribute("cajero", respuestaDto);
         return "cajero/cajero";
     }
 
     @GetMapping
-    public String mostrarTodos(@PageableDefault(size = 15, sort = "apellido") Pageable pageable, Model model) {
-        Page<AdministradorResponse> cajeroes = cajeroService.findAll(pageable);
-        model.addAttribute("cajeroes", cajeroes);
+    public String showAll(@PageableDefault(size = 15, sort = "apellido") Pageable pageable, Model model) {
+        Page<AdministradorResponse> cajeros = cajeroService.findAll(pageable);
+        model.addAttribute("cajeros", cajeros);
         return "cajero/cajeros";
     }
 
-    @GetMapping("/crear")
-    public String mostrarCrear(Model modelo) {
+    @GetMapping("/create")
+    public String showCreate(Model modelo) {
         modelo.addAttribute("cajero", new AdministradorRequest());
-        return "cajero/crearCajero";
+        return "cajero/createCajero";
     }
 
     @PostMapping
-    public String procesarCrear(@Valid @ModelAttribute("cajero") AdministradorRequest request,
+    public String create(@Valid @ModelAttribute("cajero") AdministradorRequest request,
                         BindingResult result,
                         RedirectAttributes redirectAttributes,
                         Model modelo) {
 
         if (result.hasErrors()) {
-            return "cajero/crearCajero";
+            return "cajero/createCajero";
         }
 
         try {
@@ -57,26 +57,26 @@ public class CajeroController {
             return "redirect:/";
         } catch (EmailDuplicadoException e) {
             modelo.addAttribute("error", e.getMessage());
-            return "cajero/crearCajero";
+            return "cajero/createCajero";
         }
     }
 
-    @GetMapping("/actualizar/{id}")
-    public String mostrarActualizar(@PathVariable Long id, Model modelo) {
+    @GetMapping("/update/{id}")
+    public String showUpdate(@PathVariable Long id, Model modelo) {
         AdministradorResponse cajero = cajeroService.findById(id);
         modelo.addAttribute("cajero", cajero);
-        return "cajero/actualizarCajero";
+        return "cajero/updateCajero";
     }
 
-    @PostMapping("actualizar/{id}")
-    public String procesarActualizar(@PathVariable Long id,
+    @PostMapping("update/{id}")
+    public String update(@PathVariable Long id,
                          @Valid @ModelAttribute("cajero") AdministradorRequest solicitudDto,
                          BindingResult result,
                          Model modelo,
                          RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
-            return "cajero/actualizarCajero";
+            return "cajero/updateCajero";
         }
 
         cajeroService.update(id, solicitudDto);
@@ -85,7 +85,7 @@ public class CajeroController {
     }
 
     @PostMapping("eliminar/{id}")
-    public String procesarEliminar(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    public String delete(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         cajeroService.delete(id);
         redirectAttributes.addFlashAttribute("mensaje", "Cajero eliminado");
         return "redirect:/";

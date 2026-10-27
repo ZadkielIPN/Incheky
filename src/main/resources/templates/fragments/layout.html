@@ -13,6 +13,7 @@
       <a th:href="@{/supermercado}" th:classappend="${active == 'supermarket'} ? ' active'">Supermercado</a>
       <a th:href="@{/administradores}" th:classappend="${active == 'admin'} ? ' active'">Dar de alta</a>
       <a th:href="@{/proveedores}" th:classappend="${active == 'suppliers'} ? ' active'">Proveedores</a>
+      <a th:href="@{/productos}" th:classappend="${active == 'products'} ? ' active'">Productos</a>
       <th:block th:if="${session.usuarioLogueado == null}">
         <a th:href="@{/login}" th:classappend="${active == 'login'} ? ' active'">Iniciar sesión</a>
         <a th:href="@{/create}" th:classappend="${active == 'register'} ? ' active'">Crear cuenta</a>

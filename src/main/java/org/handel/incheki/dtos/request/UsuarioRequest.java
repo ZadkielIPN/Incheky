@@ -17,16 +17,15 @@ import org.handel.incheki.enums.Rol;
 public class UsuarioRequest {
 
     @NotBlank
-    @Size(max = 255)
+    @Size(message = "El nombre no puede estar en blanco",max = 255)
     private String nombre;
 
     @NotBlank
-    @Size(max = 255)
+    @Size(message = "El apellido no puede estar en blanco",max = 255)
     private String apellido;
 
-    @NotBlank
-    @Email
-    @Size(max = 255)
+    @NotBlank(message = "El correo electrónico no puede quedar en blanco")
+    @Email(message = "El formato del correo electrónico no es válido")
     private String email;
 
     @NotBlank(message = "La contraseña no puede estar en blanco")

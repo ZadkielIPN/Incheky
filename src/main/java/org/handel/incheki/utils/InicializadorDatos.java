@@ -5,10 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.handel.incheki.enums.Rol;
 import org.handel.incheki.model.Administrador;
 import org.handel.incheki.repository.AdministradorRepository;
+import org.jspecify.annotations.NonNull;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -20,7 +20,7 @@ public class InicializadorDatos implements CommandLineRunner {
     private final AdministradorRepository administradorRepository;
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String ... args) throws Exception {
         inicializarAdministradores();
     }
 

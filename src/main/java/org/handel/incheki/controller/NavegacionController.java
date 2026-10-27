@@ -4,21 +4,12 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.handel.incheki.dtos.UsuarioSession;
-import org.handel.incheki.dtos.request.ClienteRequest;
 import org.handel.incheki.dtos.request.LoginRequest;
 import org.handel.incheki.enums.Rol;
 import org.handel.incheki.exceptions.ResourcesNotFoundException;
-import org.handel.incheki.model.Usuario;
 import org.handel.incheki.service.AdministradorService;
 import org.handel.incheki.service.UsuarioService;
 import org.handel.incheki.repository.ProductoRepository;
-import org.handel.incheki.repository.ProveedorRepository;
-import org.handel.incheki.repository.ClienteRepository;
-import org.handel.incheki.model.Cliente;
-import org.handel.incheki.enums.NivelLealtad;
-import org.handel.incheki.model.Proveedor;
-import org.handel.incheki.dtos.request.AdministradorRequest;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -65,12 +56,9 @@ public class NavegacionController {
 
         // Dependiendo del rol, rediriges a su vista correspondiente
         if (usuario.getRol() == Rol.CLIENTE) {
-            //model.addAttribute("paciente", pacienteServicio.findById(usuario.getId()));
-            return "paciente/perfil";
+            return "cliente/perfil";
         } else if (usuario.getRol() == Rol.CAJERO) {
-            //model.addAttribute("doctor", doctorServicio.findById(usuario.getId()));
-            //model.addAttribute("horarios", doctorServicio.findHorarios(usuario.getId()));
-            return "doctor/doctor";
+            return "cajero/perfil";
         } else if (usuario.getRol() == Rol.ADMINISTRADOR) {
             model.addAttribute("administrador", administradorServicio.findById(usuario.getId()));
             return "administrador/perfil";

@@ -71,14 +71,14 @@ public class AdministradorController {
                 PageRequest.of(0, 15, Sort.by("apellido"))));
     }
 
-    @GetMapping("/actualizar/{id}")
+    @GetMapping("/showUpdate/{id}")
     public String showUpdate(@PathVariable Long id, Model modelo) {
         AdministradorResponse administrador = administradorService.findById(id);
         modelo.addAttribute("administrador", administrador);
         return "administrador/actualizarAdministrador";
     }
 
-    @PostMapping("actualizar/{id}")
+    @PostMapping("/update/{id}")
     public String update(@PathVariable Long id,
                          @Valid @ModelAttribute("administrador") AdministradorRequest solicitudDto,
                          BindingResult result,
@@ -94,7 +94,7 @@ public class AdministradorController {
         return "redirect:/administradores/" + id;
     }
 
-    @PostMapping("eliminar/{id}")
+    @PostMapping("/delete/{id}")
     public String delete(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         administradorService.delete(id);
         redirectAttributes.addFlashAttribute("mensaje", "Administrador eliminado");

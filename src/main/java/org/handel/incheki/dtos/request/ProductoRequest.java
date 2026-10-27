@@ -1,10 +1,6 @@
 package org.handel.incheki.dtos.request;
 
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,31 +17,33 @@ import java.util.Set;
 @AllArgsConstructor
 public class ProductoRequest {
 
-    @NotBlank
-    @Size(max = 255)
+
+    @NotBlank(message = "El nombre no puede estar vacío")
+    @Size(max = 255, message = "El nombre no puede exceder 255 caracteres")
     private String nombre;
 
-    @NotBlank
-    @Size(max = 255)
+    @NotBlank(message = "La descripción no puede estar vacía")
+    @Size(max = 255, message = "La descripción no puede exceder 255 caracteres")
     private String descripcion;
 
     @NotNull
-    @DecimalMin("0.00")
+    @DecimalMin(value = "0.00", message = "El precio debe ser positivo")
     private BigDecimal precio;
 
     @NotNull
-    @Min(0)
+    @Min(value = 0, message = "El stock debe ser positivo")
     private Integer stock;
 
     private boolean activo = true;
 
-    @NotBlank
-    @Size(max = 50)
+    @NotBlank(message = "El código de barras no puede estar vacío")
+    @Size(max = 50, message = "El código de barras no puede exceder 50 caracteres")
     private String codigoBarras;
 
-    @NotNull
+    @NotNull(message = "La unidad de medida no puede ser nula")
     private UnidadMedida unidadMedida;
 
+    @Future(message = "La fecha de caducidad debe ser una fecha futura")
     private LocalDate fechaCaducidad;
 
     private Set<Long> promocionIds;
