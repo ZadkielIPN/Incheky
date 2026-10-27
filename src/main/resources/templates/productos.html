@@ -39,6 +39,11 @@
                     <small class="notice error" th:if="${#fields.hasErrors('precio')}" th:errors="*{precio}"></small>
                 </div>
                 <div class="field">
+                    <label for="peso">Peso</label>
+                    <input id="peso" type="number" th:field="*{peso}">
+                    <small class="notice error" th:if="${#fields.hasErrors('peso')}" th:errors="*{peso}"></small>
+                </div>
+                <div class="field">
                     <label for="stock">Stock</label>
                     <input id="stock" type="number" th:field="*{stock}">
                     <small class="notice error" th:if="${#fields.hasErrors('stock')}" th:errors="*{stock}"></small>
@@ -76,7 +81,8 @@
                     <input id="fechaCaducidad" type="date" th:field="*{fechaCaducidad}">
                     <small class="notice error" th:if="${#fields.hasErrors('fechaCaducidad')}" th:errors="*{fechaCaducidad}"></small>
                 </div>
-                <input type="hidden" name="promocionIds" value="0">
+                <input type="hidden" th:field="*{promocionIds}" name="promocionIds">
+                <input type="hidden" th:field="*{valoracion}" name="valoracion" value="0">
                 <button class="btn" type="submit">Registrar producto</button>
             </form>
         </section>

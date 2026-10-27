@@ -10,7 +10,7 @@
 <body>
 <header th:replace="~{fragments/layout :: header('login')}"></header>
 <main class="container">
-    <section class="panel narrow"><h1>Bienvenido de vuelta</h1>
+    <section class="panel narrow"><h1>Bienvenido</h1>
         <p class="muted">Inicia sesión en tu cuenta Incheky</p>
         <div class="notice error" th:if="${error}" th:text="${error}"></div>
         <form method="post" th:action="@{/login}" th:object="${loginDto}">

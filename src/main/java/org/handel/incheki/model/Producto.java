@@ -41,7 +41,7 @@ public class Producto {
     @DecimalMin(value = "0.0")
     @DecimalMax(value = "5.0")
     @Column(nullable = false, precision = 2, scale = 1)
-    private BigDecimal valoracion;
+    private BigDecimal valoracion = new BigDecimal("0.0");
 
     @NotNull
     @Column(nullable = false)

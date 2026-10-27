@@ -34,6 +34,14 @@ public class ProductoRequest {
     @Min(value = 0, message = "El stock debe ser positivo")
     private Integer stock;
 
+    @NotNull
+    @DecimalMin(value = "0.00")
+    private BigDecimal peso;
+
+    @DecimalMin(value = "0.0")
+    @DecimalMax(value = "5.0")
+    private BigDecimal valoracion = new BigDecimal("0.0");
+
     private boolean activo = true;
 
     @NotBlank(message = "El código de barras no puede estar vacío")
