@@ -76,6 +76,20 @@ a {
     flex-wrap: wrap
 }
 
+.user-greeting {
+    display: inline-flex;
+    align-items: center;
+    min-height: 34px;
+    padding: .45rem .8rem;
+    border: 1px solid #bfdbfe;
+    border-radius: 999px;
+    background: #eff6ff;
+    color: var(--ink);
+    font-size: .9rem;
+    font-weight: 700;
+    white-space: nowrap
+}
+
 .links a {
     padding: .55rem .8rem;
     border-radius: 999px;
@@ -85,6 +99,31 @@ a {
 
 .links a:hover, .links a.active {
     background: var(--accent);
+    color: #fff
+}
+
+.logout-form {
+    display: flex;
+    align-items: center
+}
+
+.logout-button {
+    border: 1px solid #fecaca;
+    border-radius: 999px;
+    padding: .5rem .8rem;
+    background: #fff;
+    color: #b91c1c;
+    font: inherit;
+    font-size: .9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color .2s ease, color .2s ease, border-color .2s ease
+}
+
+.logout-button:hover,
+.logout-button:focus-visible {
+    border-color: #dc2626;
+    background: #dc2626;
     color: #fff
 }
 

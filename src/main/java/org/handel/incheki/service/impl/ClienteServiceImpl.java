@@ -25,7 +25,7 @@ public class ClienteServiceImpl implements ClienteService {
     public ClienteResponse create(ClienteRequest request) {
         Cliente cliente = clienteMapper.toEntity(request);
 
-        cliente.setRol(Rol.ADMINISTRADOR);
+        cliente.setRol(Rol.CLIENTE);
 
         clienteRepository.save(cliente);
         return clienteMapper.toResponse(cliente);

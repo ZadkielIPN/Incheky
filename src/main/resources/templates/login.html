@@ -13,7 +13,7 @@
     <section class="panel narrow"><h1>Bienvenido de vuelta</h1>
         <p class="muted">Inicia sesión en tu cuenta Incheky</p>
         <div class="notice error" th:if="${error}" th:text="${error}"></div>
-        <form method="post" th:action="@{/create}" th:object="${loginDto}">
+        <form method="post" th:action="@{/login}" th:object="${loginDto}">
             <div class="field">
                 <label for="email">Correo electrónico</label>
                 <input id="email" type="email" th:field="*{email}" placeholder="tu@correo.com">
@@ -27,7 +27,7 @@
             <button class="btn" type="submit">Iniciar sesión</button>
         </form>
         <p class="muted"> ¿Aún no tienes cuenta?
-            <a th:href="@{/crearCuenta}" style="color:var(--accent);font-weight:700">Crear cuenta</a>
+            <a th:href="@{/create}" style="color:var(--accent);font-weight:700">Crear cuenta</a>
         </p>
     </section>
 </main>

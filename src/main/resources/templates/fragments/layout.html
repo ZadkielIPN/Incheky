@@ -11,10 +11,24 @@
     <nav class="links">
       <a th:href="@{/}" th:classappend="${active == 'store'} ? ' active'">Tienda</a>
       <a th:href="@{/supermercado}" th:classappend="${active == 'supermarket'} ? ' active'">Supermercado</a>
-      <a th:href="@{/login}" th:classappend="${active == 'login'} ? ' active'">Iniciar sesión</a>
-      <a th:href="@{/create}" th:classappend="${active == 'register'} ? ' active'">Crear cuenta</a>
       <a th:href="@{/administradores}" th:classappend="${active == 'admin'} ? ' active'">Dar de alta</a>
       <a th:href="@{/proveedores}" th:classappend="${active == 'suppliers'} ? ' active'">Proveedores</a>
+      <th:block th:if="${session.usuarioLogueado == null}">
+        <a th:href="@{/login}" th:classappend="${active == 'login'} ? ' active'">Iniciar sesión</a>
+        <a th:href="@{/create}" th:classappend="${active == 'register'} ? ' active'">Crear cuenta</a>
+      </th:block>
+
+      <th:block th:if="${session.usuarioLogueado != null}">
+        <span class="user-greeting" th:text="|Hola, ${session.usuarioLogueado.nombre}|">
+          Nombre Usuario
+        </span>
+        <a th:href="@{/perfil}" class="registro-inicio">
+          Mi Perfil
+        </a>
+        <form class="logout-form" th:action="@{/logout}" method="post">
+          <button class="logout-button" type="submit">Cerrar sesión</button>
+        </form>
+      </th:block>
     </nav>
   </div>
 </header>

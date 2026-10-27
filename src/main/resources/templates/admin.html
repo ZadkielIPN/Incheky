@@ -23,25 +23,30 @@
                     <div class="field">
                         <label for="nombre">Nombre</label>
                         <input id="nombre" th:field="*{nombre}">
+                        <small class="notice error" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></small>
                     </div>
                     <div class="field">
                         <label for="apellido">Apellido</label>
                         <input id="apellido" th:field="*{apellido}">
+                        <small class="notice error" th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}"></small>
                     </div>
                 </div>
                 <div class="field">
                     <label for="email">Correo</label>
                     <input id="email" type="email" th:field="*{email}">
+                    <small class="notice error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></small>
                 </div>
                 <div class="field">
                     <label for="password">Contraseña temporal</label>
                     <input id="password" type="password" th:field="*{contrasena}">
+                    <small class="notice error" th:if="${#fields.hasErrors('contrasena')}" th:errors="*{contrasena}"></small>
                 </div>
                 <div class="field">
                     <label for="numeroAdministrador">Número de administrador</label>
                     <input id="numeroAdministrador" type="number" th:field="*{numeroAdministrador}">
+                    <small class="notice error" th:if="${#fields.hasErrors('numeroAdministrador')}" th:errors="*{numeroAdministrador}"></small>
                 </div>
-                <input type="hidden" th:field="*{rol}" value="ADMINISTRADOR">
+                <input type="hidden" name="rol" value="ADMINISTRADOR">
                 <button class="btn" type="submit">Registrar administrador</button>
             </form>
         </section>

@@ -25,7 +25,7 @@ public class CajeroServiceImpl implements CajeroService {
     public CajeroResponse create(CajeroRequest request) {
         Cajero cajero = cajeroMapper.toEntity(request);
 
-        cajero.setRol(Rol.ADMINISTRADOR);
+        cajero.setRol(Rol.CAJERO);
 
         cajeroRepository.save(cajero);
         return cajeroMapper.toResponse(cajero);

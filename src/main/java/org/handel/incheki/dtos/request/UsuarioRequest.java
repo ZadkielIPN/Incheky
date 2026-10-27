@@ -29,8 +29,8 @@ public class UsuarioRequest {
     @Size(max = 255)
     private String email;
 
-    @NotBlank
-    @Size(max = 255)
+    @NotBlank(message = "La contraseña no puede estar en blanco")
+    @Size(min = 8, message = "La contraseña debe tener al menos 8 caracteres y un máximo de 20", max = 20)
     private String contrasena;
 
     @NotNull
