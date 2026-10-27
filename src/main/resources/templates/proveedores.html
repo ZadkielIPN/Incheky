@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Proveedores | Incheky</title>
+    <link rel="stylesheet" th:href="@{/css/incheky.css}">
+    <link rel="icon" type="image/svg+xml" sizes="32x32" th:href="@{/img/favicon.svg}">
+</head>
+<body>
+<header th:replace="~{fragments/layout :: header('suppliers')}"></header>
+<main class="container section">
+    <div class="section-head">
+        <div><h1>Control de proveedores</h1>
+            <p class="muted">Directorio y abastecimiento de Incheky.</p></div>
+    </div>
+    <div class="notice" th:if="${mensaje}" th:text="${mensaje}"></div>
+    <div class="notice error" th:if="${error}" th:text="${error}"></div>
+    <div class="form-grid">
+        <section class="panel"><h2>Nuevo proveedor</h2>
+            <form method="post" th:action="@{/proveedores}" th:object="${proveedor}">
+                <div class="field"><label>Nombre</label><input th:field="*{nombre}"></div>
+                <div class="field"><label>Teléfono</label><input th:field="*{telefono}"></div>
+                <div class="field"><label>Correo</label><input type="email" th:field="*{email}"></div>
+                <div class="field"><label>Dirección</label><textarea th:field="*{direccion}"></textarea></div>
+                <button class="btn" type="submit">Guardar proveedor</button>
+            </form>
+        </section>
+        <section class="panel"><h2>Directorio</h2>
+            <div class="table-wrap">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Proveedor</th>
+                        <th>Contacto</th>
+                        <th>Correo</th>
+                        <th>Estado</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="item : ${proveedores}">
+                        <td th:text="${item.nombre}"></td>
+                        <td th:text="${item.telefono}"></td>
+                        <td th:text="${item.email}"></td>
+                        <td><span class="status" th:text="${item.activo ? 'Activo' : 'Inactivo'}"></span></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

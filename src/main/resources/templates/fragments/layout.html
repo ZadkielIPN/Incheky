@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<body>
+<header th:fragment="header(active)" class="topbar">
+  <div class="container nav">
+    <a class="brand" th:href="@{/}">
+      <span class="logo">
+        <img th:src="@{/img/icono.jpg}" alt="icono">
+      </span>
+      <span>Incheky</span></a>
+    <nav class="links">
+      <a th:href="@{/}" th:classappend="${active == 'store'} ? ' active'">Tienda</a>
+      <a th:href="@{/supermercado}" th:classappend="${active == 'supermarket'} ? ' active'">Supermercado</a>
+      <a th:href="@{/login}" th:classappend="${active == 'login'} ? ' active'">Iniciar sesión</a>
+      <a th:href="@{/create}" th:classappend="${active == 'register'} ? ' active'">Crear cuenta</a>
+      <a th:href="@{/administradores}" th:classappend="${active == 'admin'} ? ' active'">Dar de alta</a>
+      <a th:href="@{/proveedores}" th:classappend="${active == 'suppliers'} ? ' active'">Proveedores</a>
+    </nav>
+  </div>
+</header>
+<footer th:fragment="footer"><div class="container">© 2026 Incheky · Todos los derechos reservados</div></footer>
+</body>
+</html>

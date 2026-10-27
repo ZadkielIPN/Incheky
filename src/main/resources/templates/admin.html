@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Administración | Incheky</title>
+    <link rel="stylesheet" th:href="@{/css/incheky.css}">
+    <link rel="icon" type="image/svg+xml" sizes="32x32" th:href="@{/img/favicon.svg}">
+</head>
+<body>
+<header th:replace="~{fragments/layout :: header('admin')}"></header>
+<main class="container section">
+    <div class="section-head">
+        <div><h1>Panel de administración</h1>
+            <p class="muted">Registra administradores y consulta el directorio.</p></div>
+    </div>
+    <div class="notice" th:if="${mensaje}" th:text="${mensaje}"></div>
+    <div class="notice error" th:if="${error}" th:text="${error}"></div>
+    <div class="form-grid">
+        <section class="panel"><h2>Dar de alta</h2>
+            <form method="post" th:action="@{/administradores}" th:object="${administrador}">
+                <div class="form-grid">
+                    <div class="field">
+                        <label for="nombre">Nombre</label>
+                        <input id="nombre" th:field="*{nombre}">
+                    </div>
+                    <div class="field">
+                        <label for="apellido">Apellido</label>
+                        <input id="apellido" th:field="*{apellido}">
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="email">Correo</label>
+                    <input id="email" type="email" th:field="*{email}">
+                </div>
+                <div class="field">
+                    <label for="password">Contraseña temporal</label>
+                    <input id="password" type="password" th:field="*{contrasena}">
+                </div>
+                <div class="field">
+                    <label for="numeroAdministrador">Número de administrador</label>
+                    <input id="numeroAdministrador" type="number" th:field="*{numeroAdministrador}">
+                </div>
+                <input type="hidden" th:field="*{rol}" value="ADMINISTRADOR">
+                <button class="btn" type="submit">Registrar administrador</button>
+            </form>
+        </section>
+        <section class="panel"><h2>Directorio</h2>
+            <div class="table-wrap">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Correo</th>
+                        <th>Número</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="admin : ${administradores}">
+                        <td th:text="${admin.nombre + ' ' + admin.apellido}"></td>
+                        <td th:text="${admin.email}"></td>
+                        <td th:text="${admin.numeroAdministrador}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>
