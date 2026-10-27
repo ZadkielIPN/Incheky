@@ -60,7 +60,9 @@ public class CajeroServiceImpl implements CajeroService {
     @Override
     @Transactional
     public void delete(Long id) {
-        cajeroRepository.deleteById(id);
+        Cajero cajero = findCajeroById(id);
+
+        cajeroRepository.delete(cajero);
     }
 
     private Cajero findCajeroById(Long id) {

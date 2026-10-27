@@ -60,7 +60,9 @@ public class ClienteServiceImpl implements ClienteService {
     @Override
     @Transactional
     public void delete(Long id) {
-        clienteRepository.deleteById(id);
+        Cliente cliente = findClienteById(id);
+
+        clienteRepository.delete(cliente);
     }
 
     private Cliente findClienteById(Long id) {
