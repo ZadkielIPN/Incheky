@@ -7,7 +7,9 @@ import org.handel.incheki.dtos.response.AdministradorResponse;
 import org.handel.incheki.exceptions.EmailDuplicadoException;
 import org.handel.incheki.service.AdministradorService;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -66,7 +68,7 @@ public class AdministradorController {
 
     private void addAdministradores(Model model) {
         model.addAttribute("administradores", administradorService.findAll(
-                org.springframework.data.domain.PageRequest.of(0, 15, org.springframework.data.domain.Sort.by("apellido"))));
+                PageRequest.of(0, 15, Sort.by("apellido"))));
     }
 
     @GetMapping("/actualizar/{id}")
