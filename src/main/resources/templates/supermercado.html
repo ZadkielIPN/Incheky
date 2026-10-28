@@ -11,17 +11,25 @@
 <header th:replace="~{fragments/layout :: header('supermarket')}"></header>
 <main class="container section">
     <div class="section-head">
-        <div><h1>Supermercado físico</h1>
-            <p class="muted">Consulta el catálogo y disponibilidad actual.</p></div>
-        <span class="tag">Sucursal Centro</span></div>
+        <div>
+            <h1>Supermercado físico</h1>
+            <p class="muted">Consulta el catálogo y disponibilidad actual.</p>
+        </div>
+        <span class="tag">Sucursal Centro</span>
+    </div>
     <div class="grid">
         <article class="card" th:each="producto : ${productos}">
-            <div class="card-body"><span class="tag" th:text="${producto.unidadMedida}"></span>
+            <div class="card-body">
+                <img class="product-img"
+                     th:src="@{'/img/productos/' + ${producto.imagen}}"
+                     th:alt="${producto.nombre}">
+                <span class="tag" th:text="${producto.unidadMedida}"></span>
                 <h3 th:text="${producto.nombre}"></h3>
                 <p class="muted" th:text="${producto.descripcion}"></p>
-                <div class="section-head"><span class="price"
-                                                th:text="'$' + ${#numbers.formatDecimal(producto.precio,1,2)}"></span><span
-                        class="muted" th:text="${producto.stock} + ' disponibles'"></span></div>
+                <div class="section-head">
+                    <span class="price" th:text="'$' + ${#numbers.formatDecimal(producto.precio,1,2)}"></span>
+                    <span class="muted" th:text="${producto.stock} + ' disponibles'"></span>
+                </div>
                 <button class="btn" type="button">Agregar al ticket</button>
             </div>
         </article>

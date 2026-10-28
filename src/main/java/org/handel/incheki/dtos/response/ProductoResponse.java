@@ -25,5 +25,6 @@ public class ProductoResponse {
     private String codigoBarras;
     private UnidadMedida unidadMedida;
     private LocalDate fechaCaducidad;
+    private String imagen;
     private Set<Long> promocionIds;
 }

@@ -54,5 +54,7 @@ public class ProductoRequest {
     @Future(message = "La fecha de caducidad debe ser una fecha futura")
     private LocalDate fechaCaducidad;
 
+    private String imagen;
+
     private Set<Long> promocionIds;
 }

@@ -33,7 +33,7 @@
         <div class="grid" th:if="${not #lists.isEmpty(productos)}">
             <article class="card" th:each="producto : ${productos}">
                 <img class="product-img"
-                     src="https://images.unsplash.com/photo-1601600576337-c1d8a0d1373c?auto=format&amp;fit=crop&amp;w=500&amp;q=80"
+                     th:src="@{'/img/productos/' + ${producto.imagen}}"
                      th:alt="${producto.nombre}">
                 <div class="card-body"><span class="tag" th:text="${producto.unidadMedida}">Unidad</span>
                     <h3 th:text="${producto.nombre}">Producto</h3>

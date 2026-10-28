@@ -64,6 +64,9 @@ public class Producto {
     @Column(name = "fecha_caducidad")
     private LocalDate fechaCaducidad;
 
+    @Column(name = "imagen")
+    private String imagen;
+
     @ManyToMany
     @JoinTable(
             name = "promociones_productos",
