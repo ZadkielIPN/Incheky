@@ -34,13 +34,13 @@ public class AdministradorController {
     public String showAll(@PageableDefault(size = 15, sort = "apellido") Pageable pageable, Model model) {
         Page<AdministradorResponse> administradores = administradorService.findAll(pageable);
         model.addAttribute("administradores", administradores);
-        model.addAttribute("administrador", new AdministradorRequest());
+        model.addAttribute("administrador", nuevoFormulario());
         return "admin";
     }
 
     @GetMapping("/create")
     public String showCreate(Model modelo) {
-        modelo.addAttribute("administrador", new AdministradorRequest());
+        modelo.addAttribute("administrador", nuevoFormulario());
         return "admin";
     }
 
@@ -51,6 +51,7 @@ public class AdministradorController {
                         Model modelo) {
 
         if (result.hasErrors()) {
+            request.setNumeroAdministrador(administradorService.siguienteNumero());
             addAdministradores(modelo);
             return "admin";
         }
@@ -99,5 +100,11 @@ public class AdministradorController {
         administradorService.delete(id);
         redirectAttributes.addFlashAttribute("mensaje", "Administrador eliminado");
         return "redirect:/";
+    }
+
+    private AdministradorRequest nuevoFormulario() {
+        AdministradorRequest request = new AdministradorRequest();
+        request.setNumeroAdministrador(administradorService.siguienteNumero());
+        return request;
     }
 }

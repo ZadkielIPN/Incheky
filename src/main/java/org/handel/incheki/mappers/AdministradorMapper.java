@@ -9,6 +9,7 @@ import org.mapstruct.*;
 public interface AdministradorMapper {
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "numeroAdministrador", ignore = true)
     @BeanMapping(builder = @Builder(disableBuilder = true))
     Administrador toEntity(AdministradorRequest request);
 
@@ -16,5 +17,6 @@ public interface AdministradorMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "rol", ignore = true)
+    @Mapping(target = "numeroAdministrador", ignore = true)
     void update(AdministradorRequest request, @MappingTarget Administrador administrador);
 }

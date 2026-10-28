@@ -45,8 +45,7 @@
                 </div>
                 <div class="field">
                     <label for="numeroAdministrador">Número de administrador</label>
-                    <input id="numeroAdministrador" type="number" th:field="*{numeroAdministrador}">
-                    <small class="notice error" th:if="${#fields.hasErrors('numeroAdministrador')}" th:errors="*{numeroAdministrador}"></small>
+                    <input id="numeroAdministrador" type="number" th:field="*{numeroAdministrador}" disabled>
                 </div>
                 <input type="hidden" name="rol" value="ADMINISTRADOR">
                 <button class="btn" type="submit">Registrar administrador</button>

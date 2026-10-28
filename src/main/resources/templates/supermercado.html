@@ -20,8 +20,8 @@
     <div class="grid">
         <article class="card" th:each="producto : ${productos}">
             <div class="card-body">
-                <img class="product-img"
-                     th:src="@{'/img/productos/' + ${producto.imagen}}"
+                <img th:src="@{'/uploads/productos/' + ${producto.imagen}}"
+                     th:if="${producto.imagen != null}"
                      th:alt="${producto.nombre}">
                 <span class="tag" th:text="${producto.unidadMedida}"></span>
                 <h3 th:text="${producto.nombre}"></h3>

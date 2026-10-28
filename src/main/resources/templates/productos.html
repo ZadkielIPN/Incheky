@@ -20,7 +20,7 @@
     <div class="notice error" th:if="${error}" th:text="${error}"></div>
     <div class="form-grid">
         <section class="panel"><h2>Dar de alta</h2>
-            <form method="post" th:action="@{/productos}" th:object="${producto}">
+            <form method="post" th:action="@{/productos}" th:object="${producto}" enctype="multipart/form-data">
                 <div class="form-grid">
                     <div class="field">
                         <label for="nombre">Nombre</label>
@@ -80,6 +80,11 @@
                     <label for="fechaCaducidad">Fecha de Caducidad</label>
                     <input id="fechaCaducidad" type="date" th:field="*{fechaCaducidad}">
                     <small class="notice error" th:if="${#fields.hasErrors('fechaCaducidad')}" th:errors="*{fechaCaducidad}"></small>
+                </div>
+                <div class="field">
+                    <label for="archivoImagen">Imagen</label>
+                    <input id="archivoImagen" name="archivoImagen" type="file" accept="image/*">
+                    <small class="notice error" th:if="${#fields.hasErrors('imagen')}" th:errors="*{imagen}"></small>
                 </div>
                 <input type="hidden" th:field="*{promocionIds}" name="promocionIds">
                 <input type="hidden" th:field="*{valoracion}" name="valoracion" value="0">

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -47,6 +48,7 @@ public class ProductoController {
     @PostMapping
     public String create(@Valid @ModelAttribute("producto") ProductoRequest request,
                         BindingResult result,
+                        @RequestParam(value = "archivoImagen", required = false) MultipartFile file,
                         RedirectAttributes redirectAttributes,
                         Model modelo) {
 
@@ -56,7 +58,14 @@ public class ProductoController {
             return "productos";
         }
 
-        productoService.create(request);
+        try {
+            productoService.create(request, file);
+        } catch (IllegalArgumentException e) {
+            modelo.addAttribute("error", e.getMessage());
+            modelo.addAttribute("unidadesMedida", UnidadMedida.values());
+            return "productos";
+        }
+
         redirectAttributes.addFlashAttribute("mensaje", "Producto guardado exitosamente");
         return "redirect:/productos";
     }

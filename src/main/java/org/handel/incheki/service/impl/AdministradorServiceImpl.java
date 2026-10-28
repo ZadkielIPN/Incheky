@@ -33,6 +33,7 @@ public class AdministradorServiceImpl implements AdministradorService {
         Administrador administrador = administradorMapper.toEntity(request);
 
         administrador.setRol(Rol.ADMINISTRADOR);
+        administrador.setNumeroAdministrador(siguienteNumero());
 
         administradorRepository.save(administrador);
         return administradorMapper.toResponse(administrador);
@@ -70,6 +71,12 @@ public class AdministradorServiceImpl implements AdministradorService {
         Administrador administrador = findAdministradorById(id);
 
         administradorRepository.delete(administrador);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Long siguienteNumero() {
+        return administradorRepository.findMaxNumeroAdministrador() + 1;
     }
 
     private Administrador findAdministradorById(Long id) {

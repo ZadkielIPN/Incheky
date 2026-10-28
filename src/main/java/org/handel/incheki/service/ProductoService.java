@@ -4,9 +4,10 @@ import org.handel.incheki.dtos.request.ProductoRequest;
 import org.handel.incheki.dtos.response.ProductoResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface ProductoService {
-    ProductoResponse create(ProductoRequest request);
+    ProductoResponse create(ProductoRequest request, MultipartFile file);
 
     ProductoResponse findById(Long id);
 

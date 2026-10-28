@@ -14,5 +14,7 @@ public interface AdministradorService {
 
     AdministradorResponse update(Long id, AdministradorRequest request);
 
+    Long siguienteNumero();
+
     void delete(Long id);
 }

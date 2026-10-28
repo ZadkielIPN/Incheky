@@ -460,6 +460,7 @@ a {
 }
 
 .notice {
+    display: block;
     padding: .8rem 1rem;
     border-radius: 12px;
     margin-bottom: 1rem;

@@ -30,7 +30,7 @@ public class InicializadorDatos implements CommandLineRunner {
                     Administrador.builder()
                             .nombre("Zadkiel").apellido("Barron Dominguez")
                             .email("ZadkielBD@outlook.com")
-                            .contrasena("ContraseñaSegura123")
+                            .contrasena("ZadkielHandel#123")
                             .rol(Rol.ADMINISTRADOR)
                             .numeroAdministrador(1L)
                             .build(),
@@ -38,7 +38,7 @@ public class InicializadorDatos implements CommandLineRunner {
                             .nombre("Leonardo")
                             .apellido("Gonzalez Rendón")
                             .email("LeonardoGR@handel.com")
-                            .contrasena("HandelAppointlyLGR")
+                            .contrasena("LeonardoHandel#123")
                             .rol(Rol.ADMINISTRADOR)
                             .numeroAdministrador(2L)
                             .build()

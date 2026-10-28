@@ -10,7 +10,10 @@
       <span>Incheky</span></a>
     <nav class="links">
       <a th:href="@{/}" th:classappend="${active == 'store'} ? ' active'">Tienda</a>
-      <th:block th:if="${session.usuarioLogueado != null and session.usuarioLogueado.rol.name() == 'CAJERO'}">
+      <th:block th:if="${
+      (session.usuarioLogueado != null and session.usuarioLogueado.rol.name() == 'CAJERO') or
+      (session.usuarioLogueado != null and session.usuarioLogueado.rol.name() == 'ADMINISTRADOR')
+      }">
         <a th:href="@{/supermercado}" th:classappend="${active == 'supermarket'} ? ' active'">Supermercado</a>
       </th:block>
       <th:block th:if="${session.usuarioLogueado != null and session.usuarioLogueado.rol.name() == 'ADMINISTRADOR'}">

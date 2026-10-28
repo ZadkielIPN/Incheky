@@ -12,8 +12,5 @@ import lombok.Setter;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class AdministradorRequest extends UsuarioRequest {
-
-    @NotNull
-    @Min(1)
     private Long numeroAdministrador;
 }
