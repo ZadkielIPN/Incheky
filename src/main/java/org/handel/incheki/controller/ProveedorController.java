@@ -2,8 +2,10 @@ package org.handel.incheki.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.handel.incheki.dtos.request.ProveedorRequest;
 import org.handel.incheki.model.Proveedor;
 import org.handel.incheki.repository.ProveedorRepository;
+import org.handel.incheki.service.ProveedorService;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequiredArgsConstructor
 public class ProveedorController {
+    private final ProveedorService proveedorService;
     private final ProveedorRepository proveedorRepository;
 
     @GetMapping("/proveedores")
@@ -26,13 +29,13 @@ public class ProveedorController {
     }
 
     @PostMapping("/proveedores")
-    public String crearProveedor(@Valid @ModelAttribute("proveedor") Proveedor proveedor,
+    public String crearProveedor(@Valid @ModelAttribute("proveedor") ProveedorRequest request,
                                  BindingResult result, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             redirectAttributes.addFlashAttribute("error", "Revisa los datos del proveedor.");
             return "redirect:/proveedores";
         }
-        proveedorRepository.save(proveedor);
+        proveedorService.create(request);
         redirectAttributes.addFlashAttribute("mensaje", "Proveedor registrado correctamente.");
         return "redirect:/proveedores";
     }

@@ -11,19 +11,26 @@
 <header th:replace="~{fragments/layout :: header('store')}"></header>
 <main>
     <section class="hero">
-        <div class="container"><p>Bienvenido a</p>
+        <div class="container">
+            <p>Bienvenido a</p>
             <h1>Incheky</h1>
             <p>Productos frescos y de calidad para tu hogar. Compra hoy y ahorra.</p>
-            <p>★★★★★ <span>4.8 · Más de 500 clientes satisfechos</span></p></div>
+            <p>★★★★★ <span>4.8 · Más de 500 clientes satisfechos</span></p>
+        </div>
     </section>
     <div class="info">
-        <div class="container"><span>📍 Calle Morelos 45, Col. Centro</span><span>☎ 555-123-4567</span><span>🟢 Abierto · Lun–Sáb 7am–9pm</span>
+        <div class="container">
+            <span>📍 Calle Morelos 45, Col. Centro</span>
+            <span>☎ 555-123-4567</span>
+            <span>🟢 Abierto · Lun–Sáb 7am–9pm</span>
         </div>
     </div>
     <section class="container section">
         <div class="section-head">
-            <div><h2>Productos disponibles</h2>
-                <p class="muted" th:text="${#lists.size(productos)} + ' productos encontrados'"></p></div>
+            <div>
+                <h2>Productos disponibles</h2>
+                <p class="muted" th:text="${#lists.size(productos)} + ' productos encontrados'"></p>
+            </div>
             <form class="search" method="get" th:action="@{/}">
                 <input name="q" th:value="${busqueda}" placeholder="Buscar productos...">
                 <button class="btn">Buscar</button>
@@ -35,7 +42,8 @@
                 <img th:src="@{'/uploads/productos/' + ${producto.imagen}}"
                      th:if="${producto.imagen != null}"
                      th:alt="${producto.nombre}">
-                <div class="card-body"><span class="tag" th:text="${producto.unidadMedida}">Unidad</span>
+                <div class="card-body">
+                    <span class="tag" th:text="${producto.unidadMedida}">Unidad</span>
                     <h3 th:text="${producto.nombre}">Producto</h3>
                     <p class="muted" th:text="${producto.descripcion}">Descripción</p>
                     <p>
