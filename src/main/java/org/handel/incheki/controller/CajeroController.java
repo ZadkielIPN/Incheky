@@ -2,10 +2,10 @@ package org.handel.incheki.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.handel.incheki.dtos.request.AdministradorRequest;
-import org.handel.incheki.dtos.response.AdministradorResponse;
+import org.handel.incheki.dtos.request.CajeroRequest;
+import org.handel.incheki.dtos.response.CajeroResponse;
 import org.handel.incheki.exceptions.EmailDuplicadoException;
-import org.handel.incheki.service.AdministradorService;
+import org.handel.incheki.service.CajeroService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -19,30 +19,30 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/cajeros")
 @RequiredArgsConstructor
 public class CajeroController {
-    final AdministradorService cajeroService;
+    final CajeroService cajeroService;
 
     @GetMapping("/{id}")
     public String showById(@PathVariable Long id, Model modelo) {
-        AdministradorResponse respuestaDto = cajeroService.findById(id);
+        CajeroResponse respuestaDto = cajeroService.findById(id);
         modelo.addAttribute("cajero", respuestaDto);
-        return "cajero/cajero";
+        return "cajero";
     }
 
     @GetMapping
     public String showAll(@PageableDefault(size = 15, sort = "apellido") Pageable pageable, Model model) {
-        Page<AdministradorResponse> cajeros = cajeroService.findAll(pageable);
+        Page<CajeroResponse> cajeros = cajeroService.findAll(pageable);
         model.addAttribute("cajeros", cajeros);
         return "cajero/cajeros";
     }
 
     @GetMapping("/create")
     public String showCreate(Model modelo) {
-        modelo.addAttribute("cajero", new AdministradorRequest());
+        modelo.addAttribute("cajero", new CajeroRequest());
         return "cajero/createCajero";
     }
 
     @PostMapping
-    public String create(@Valid @ModelAttribute("cajero") AdministradorRequest request,
+    public String create(@Valid @ModelAttribute("cajero") CajeroRequest request,
                         BindingResult result,
                         RedirectAttributes redirectAttributes,
                         Model modelo) {
@@ -63,14 +63,14 @@ public class CajeroController {
 
     @GetMapping("/update/{id}")
     public String showUpdate(@PathVariable Long id, Model modelo) {
-        AdministradorResponse cajero = cajeroService.findById(id);
+        CajeroResponse cajero = cajeroService.findById(id);
         modelo.addAttribute("cajero", cajero);
         return "cajero/updateCajero";
     }
 
     @PostMapping("update/{id}")
     public String update(@PathVariable Long id,
-                         @Valid @ModelAttribute("cajero") AdministradorRequest solicitudDto,
+                         @Valid @ModelAttribute("cajero") CajeroRequest solicitudDto,
                          BindingResult result,
                          Model modelo,
                          RedirectAttributes redirectAttributes) {
