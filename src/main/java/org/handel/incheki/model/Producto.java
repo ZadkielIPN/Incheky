@@ -34,7 +34,7 @@ public class Producto {
 
     @NotNull
     @DecimalMin(value = "0.00")
-    @Column(nullable = false, precision = 5, scale = 2)
+    @Column(nullable = false, precision = 6, scale = 2)
     private BigDecimal peso;
 
     @NotNull
