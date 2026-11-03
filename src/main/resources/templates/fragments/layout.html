@@ -23,7 +23,7 @@
       </th:block>
       <th:block th:if="${session.usuarioLogueado == null}" th:class="registro-inicio">
         <a th:href="@{/login}" th:classappend="${active == 'login'} ? ' active'">Iniciar sesión</a>
-        <a th:href="@{/create}" th:classappend="${active == 'register'} ? ' active'">Crear cuenta</a>
+        <a th:href="@{/clientes/create}" th:classappend="${active == 'register'} ? ' active'">Crear cuenta</a>
       </th:block>
 
       <th:block th:if="${session.usuarioLogueado != null}">
