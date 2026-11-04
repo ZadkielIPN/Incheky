@@ -13,6 +13,8 @@ public interface ProductoService {
 
     Page<ProductoResponse> findAll(Pageable pageable);
 
+    Page<ProductoResponse> findAll(String q, Pageable pageable);
+
     ProductoResponse update(Long id, ProductoRequest request);
 
     void delete(Long id);

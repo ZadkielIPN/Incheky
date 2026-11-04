@@ -3,59 +3,55 @@ package org.handel.incheki.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.handel.incheki.dtos.request.VentaRequest;
+import org.handel.incheki.dtos.response.VentaResponse;
 import org.handel.incheki.model.Venta;
 import org.handel.incheki.repository.VentaRepository;
 import org.handel.incheki.service.VentaService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-@Controller
-@RequestMapping("/ventas")
+@RestController
+@RequestMapping("/api/ventas")
 @RequiredArgsConstructor
 public class VentaController {
     private final VentaService ventaService;
-    private final VentaRepository ventaRepository;
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<VentaResponse> getVentaById(@PathVariable Long id) {
+        VentaResponse response = ventaService.findById(id);
+        return ResponseEntity.ok(response);
+    }
 
     @GetMapping
-    public String ventas(Model model) {
-        model.addAttribute("ventas", ventaRepository.findAll(Sort.by("nombre")));
-        model.addAttribute("venta", new Venta());
-        return "ventas";
+    public ResponseEntity<Page<VentaResponse>> getAllVentas(Pageable pageable) {
+        Page<VentaResponse> response = ventaService.findAll(pageable);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping
-    public String crearVenta(@Valid @ModelAttribute("venta") VentaRequest request,
-                                 BindingResult result, RedirectAttributes redirectAttributes) {
-        if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("error", "Revisa los datos del venta.");
-            return "redirect:/ventas";
-        }
-        ventaService.create(request);
-        redirectAttributes.addFlashAttribute("mensaje", "Venta registrado correctamente.");
-        return "redirect:/ventas";
+    public ResponseEntity<VentaResponse> createVenta(@Valid @RequestBody VentaRequest request) {
+        VentaResponse response = ventaService.create(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PostMapping("actualizar/{id}")
-    public String update(@Valid @ModelAttribute("venta") VentaRequest request,
-                         @PathVariable Long id,
-                         BindingResult result, RedirectAttributes redirectAttributes) {
-        if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("error", "Revisa los datos del venta.");
-            return "redirect:/ventas";
-        }
-        ventaService.update(id, request);
-        redirectAttributes.addFlashAttribute("mensaje", "Venta actualizado correctamente.");
-        return "redirect:/ventas";
+    @PutMapping("/{id}")
+    public ResponseEntity<VentaResponse> updateVenta(@PathVariable Long id, @Valid @RequestBody VentaRequest request) {
+        VentaResponse response = ventaService.update(id, request);
+        return ResponseEntity.ok(response);
     }
 
-    @PostMapping("eliminar/{id}")
-    public String delete(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteVenta(@PathVariable Long id) {
         ventaService.delete(id);
-        redirectAttributes.addFlashAttribute("mensaje", "Venta eliminado correctamente.");
-        return "redirect:/ventas";
+        return ResponseEntity.noContent().build();
     }
 }

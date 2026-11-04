@@ -3,59 +3,47 @@ package org.handel.incheki.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.handel.incheki.dtos.request.ProveedorRequest;
-import org.handel.incheki.model.Proveedor;
-import org.handel.incheki.repository.ProveedorRepository;
+import org.handel.incheki.dtos.response.ProveedorResponse;
 import org.handel.incheki.service.ProveedorService;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-@Controller
-@RequestMapping("/proveedores")
+@RestController
+@RequestMapping("/api/proveedores")
 @RequiredArgsConstructor
 public class ProveedorController {
     private final ProveedorService proveedorService;
-    private final ProveedorRepository proveedorRepository;
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProveedorResponse> getProveedorById(@PathVariable Long id) {
+        ProveedorResponse response = proveedorService.findById(id);
+        return ResponseEntity.ok(response);
+    }
 
     @GetMapping
-    public String proveedores(Model model) {
-        model.addAttribute("proveedores", proveedorRepository.findAll(Sort.by("nombre")));
-        model.addAttribute("proveedor", new Proveedor());
-        return "proveedores";
+    public ResponseEntity<Page<ProveedorResponse>> getAllProveedors(Pageable pageable) {
+        Page<ProveedorResponse> response = proveedorService.findAll(pageable);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping
-    public String crearProveedor(@Valid @ModelAttribute("proveedor") ProveedorRequest request,
-                                 BindingResult result, RedirectAttributes redirectAttributes) {
-        if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("error", "Revisa los datos del proveedor.");
-            return "redirect:/proveedores";
-        }
-        proveedorService.create(request);
-        redirectAttributes.addFlashAttribute("mensaje", "Proveedor registrado correctamente.");
-        return "redirect:/proveedores";
+    public ResponseEntity<ProveedorResponse> createProveedor(@Valid @RequestBody ProveedorRequest request) {
+        ProveedorResponse response = proveedorService.create(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PostMapping("actualizar/{id}")
-    public String update(@Valid @ModelAttribute("proveedor") ProveedorRequest request,
-                         @PathVariable Long id,
-                         BindingResult result, RedirectAttributes redirectAttributes) {
-        if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("error", "Revisa los datos del proveedor.");
-            return "redirect:/proveedores";
-        }
-        proveedorService.update(id, request);
-        redirectAttributes.addFlashAttribute("mensaje", "Proveedor actualizado correctamente.");
-        return "redirect:/proveedores";
+    @PutMapping("/{id}")
+    public ResponseEntity<ProveedorResponse> updateProveedor(@PathVariable Long id, @Valid @RequestBody ProveedorRequest request) {
+        ProveedorResponse response = proveedorService.update(id, request);
+        return ResponseEntity.ok(response);
     }
 
-    @PostMapping("eliminar/{id}")
-    public String delete(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProveedor(@PathVariable Long id) {
         proveedorService.delete(id);
-        redirectAttributes.addFlashAttribute("mensaje", "Proveedor eliminado correctamente.");
-        return "redirect:/proveedores";
+        return ResponseEntity.noContent().build();
     }
 }
