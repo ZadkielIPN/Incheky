@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Perfil | Incheky</title>
+    <link rel="stylesheet" th:href="@{/css/incheky.css}">
+    <link rel="icon" type="image/svg+xml" sizes="32x32" th:href="@{/img/favicon.svg}">
+</head>
+<body>
+<header th:replace="~{fragments/layout :: header('perfil')}"></header>
+<main class="container section">
+    <div class="section-head">
+        <div>
+            <h1>Perfil</h1>
+            <p class="muted">Perfil de administrador</p>
+        </div>
+    </div>
+    <div class="notice" th:if="${mensaje}" th:text="${mensaje}"></div>
+    <div class="notice error" th:if="${error}" th:text="${error}"></div>
+    <div class="form-grid">
+        <section class="panel">
+            <h2>Perfil</h2>
+            <div class="table-wrap">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Correo</th>
+                        <th>Rol</th>
+                        <th>Numero de Administrador</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td th:text="${administrador.nombre + ' ' + administrador.apellido}"></td>
+                        <td th:text="${administrador.email}"></td>
+                        <td th:text="${administrador.rol}"></td>
+                        <td th:text="${administrador.numeroAdministrador}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>
