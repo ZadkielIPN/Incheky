@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Iniciar sesión | Incheky</title>
+    <link rel="stylesheet" th:href="@{/css/incheky.css}">
+    <link rel="icon" type="image/svg+xml" sizes="32x32" th:href="@{/img/favicon.svg}">
+</head>
+<body>
+<header th:replace="~{fragments/layout :: header('login')}"></header>
+<main class="container">
+    <section class="panel narrow"><h1>Bienvenido</h1>
+        <p class="muted">Inicia sesión en tu cuenta Incheky</p>
+        <div class="notice error" th:if="${error}" th:text="${error}"></div>
+        <form method="post" th:action="@{/abastecimiento}" th:object="${abastecimientoDto}">
+            <div class="field">
+                <label for="email">Correo electrónico</label>
+                <input id="email" type="email" th:field="*{email}" placeholder="tu@correo.com">
+                <small class="notice error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></small>
+            </div>
+            <div class="field">
+                <label for="password">Contraseña</label>
+                <input id="password" type="password" th:field="*{contrasena}" placeholder="••••••••">
+                <small class="notice error" th:if="${#fields.hasErrors('contrasena')}" th:errors="*{contrasena}"></small>
+            </div>
+            <button class="btn" type="submit">Iniciar sesión</button>
+        </form>
+        <p class="muted"> ¿Aún no tienes cuenta?
+            <a th:href="@{/create}" style="color:var(--accent);font-weight:700">Crear cuenta</a>
+        </p>
+    </section>
+</main>
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>
