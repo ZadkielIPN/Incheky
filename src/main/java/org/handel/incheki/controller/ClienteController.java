@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/clientes")
+@RequestMapping("/api/clientes")
 @RequiredArgsConstructor
 public class ClienteController {
     private final ClienteService clienteService;
