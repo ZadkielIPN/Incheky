@@ -6,43 +6,33 @@ import org.handel.incheki.enums.Rol;
 import org.handel.incheki.service.UsuarioService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-@Controller
-@RequestMapping("/usuarios")
+@RestController
+@RequestMapping("/api/usuarios")
 @RequiredArgsConstructor
 public class UsuarioController {
-
     private final UsuarioService usuarioService;
 
+
     @GetMapping("/{id}")
-    public String mostrarPorId(@PathVariable Long id, Model modelo) {
-        UsuarioResponse usuario = usuarioService.findById(id);
-        modelo.addAttribute("usuario", usuario);
-        return "usuario";
+    public ResponseEntity<UsuarioResponse> getUsuarioById(@PathVariable Long id) {
+        UsuarioResponse response = usuarioService.findById(id);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping
-    public String findAll(
-            @RequestParam(required = false) Rol rol,
-            @PageableDefault(size = 15, sort = "apellido") Pageable pageable,
-            Model modelo) {
-        Page<UsuarioResponse> usuarios = usuarioService.findAll(rol, pageable);
-        modelo.addAttribute("usuarios", usuarios);
-
-        return "usuarios";
+    public ResponseEntity<Page<UsuarioResponse>> getAllUsuarios(@RequestParam(required = false) Rol rol,
+                                                                Pageable pageable) {
+        Page<UsuarioResponse> response = usuarioService.findAll(rol, pageable);
+        return ResponseEntity.ok(response);
     }
 
-   @PutMapping("/{id}")
-    public String delete(@PathVariable Long id,
-                         RedirectAttributes redirectAttributes) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUsuario(@PathVariable Long id) {
         usuarioService.delete(id);
-
-        redirectAttributes.addFlashAttribute("mensaje", "Usuario eliminado");
-        return "redirect:/";
+        return ResponseEntity.noContent().build();
     }
 }

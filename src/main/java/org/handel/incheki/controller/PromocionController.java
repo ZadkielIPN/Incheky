@@ -3,59 +3,54 @@ package org.handel.incheki.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.handel.incheki.dtos.request.PromocionRequest;
+import org.handel.incheki.dtos.response.PromocionResponse;
 import org.handel.incheki.model.Promocion;
 import org.handel.incheki.repository.PromocionRepository;
 import org.handel.incheki.service.PromocionService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-@Controller
-@RequestMapping(("/promociones"))
+@RestController
+@RequestMapping(("/api/promociones"))
 @RequiredArgsConstructor
 public class PromocionController {
     private final PromocionService promocionService;
-    private final PromocionRepository promocionRepository;
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PromocionResponse> getPromocionById(@PathVariable Long id) {
+        PromocionResponse response = promocionService.findById(id);
+        return ResponseEntity.ok(response);
+    }
 
     @GetMapping
-    public String showAll(Model model) {
-        model.addAttribute("promociones", promocionRepository.findAll(Sort.by("nombre")));
-        model.addAttribute("promocion", new Promocion());
-        return "promociones";
+    public ResponseEntity<Page<PromocionResponse>> getAllPromocions(Pageable pageable) {
+        Page<PromocionResponse> response = promocionService.findAll(pageable);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping
-    public String create(@Valid @ModelAttribute("promocion") PromocionRequest request,
-                                 BindingResult result, RedirectAttributes redirectAttributes) {
-        if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("error", "Revisa los datos del promocion.");
-            return "redirect:/promociones";
-        }
-        promocionService.create(request);
-        redirectAttributes.addFlashAttribute("mensaje", "Promocion registrado correctamente.");
-        return "redirect:/promociones";
+    public ResponseEntity<PromocionResponse> createPromocion(@Valid @RequestBody PromocionRequest request) {
+        PromocionResponse response = promocionService.create(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PostMapping("actualizar/{id}")
-    public String update(@Valid @ModelAttribute("promocion") PromocionRequest request,
-                                 @PathVariable Long id,
-                                 BindingResult result, RedirectAttributes redirectAttributes) {
-        if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("error", "Revisa los datos del promocion.");
-            return "redirect:/promociones";
-        }
-        promocionService.update(id, request);
-        redirectAttributes.addFlashAttribute("mensaje", "Promocion actualizado correctamente.");
-        return "redirect:/promociones";
+    @PutMapping("/{id}")
+    public ResponseEntity<PromocionResponse> updatePromocion(@PathVariable Long id, @Valid @RequestBody PromocionRequest request) {
+        PromocionResponse response = promocionService.update(id, request);
+        return ResponseEntity.ok(response);
     }
 
-    @PostMapping("eliminar/{id}")
-    public String delete(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePromocion(@PathVariable Long id) {
         promocionService.delete(id);
-        redirectAttributes.addFlashAttribute("mensaje", "Promocion eliminado correctamente.");
-        return "redirect:/promociones";
+        return ResponseEntity.noContent().build();
     }
 }

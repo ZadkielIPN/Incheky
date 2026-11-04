@@ -4,98 +4,51 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.handel.incheki.dtos.request.ProductoRequest;
 import org.handel.incheki.dtos.response.ProductoResponse;
-import org.handel.incheki.enums.UnidadMedida;
 import org.handel.incheki.service.ProductoService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-@Controller
+@RestController
 @RequestMapping("/productos")
 @RequiredArgsConstructor
 public class ProductoController {
     final ProductoService productoService;
 
+
     @GetMapping("/{id}")
-    public String showById(@PathVariable Long id, Model modelo) {
-        ProductoResponse respuestaDto = productoService.findById(id);
-        modelo.addAttribute("producto", respuestaDto);
-        return "producto/producto";
+    public ResponseEntity<ProductoResponse> getProductoById(@PathVariable Long id) {
+        ProductoResponse response = productoService.findById(id);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping
-    public String showAll(@PageableDefault(size = 15, sort = "nombre") Pageable pageable, Model model) {
-        Page<ProductoResponse> productos = productoService.findAll(pageable);
-        model.addAttribute("productos", productos);
-        model.addAttribute("producto", new ProductoRequest());
-        model.addAttribute("unidadesMedida", UnidadMedida.values());
-        return "productos";
-    }
-
-    @GetMapping("/create")
-    public String showCreate(Model modelo) {
-        modelo.addAttribute("producto", new ProductoRequest());
-        modelo.addAttribute("unidadesMedida", UnidadMedida.values());
-        return "productos";
+    public ResponseEntity<Page<ProductoResponse>> getAllProductos(@RequestParam(required = false) String q,
+                                                                  Pageable pageable) {
+        Page<ProductoResponse> response = productoService.findAll(q, pageable);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping
-    public String create(@Valid @ModelAttribute("producto") ProductoRequest request,
-                        BindingResult result,
-                        @RequestParam(value = "archivoImagen", required = false) MultipartFile file,
-                        RedirectAttributes redirectAttributes,
-                        Model modelo) {
-
-        if (result.hasErrors()) {
-            modelo.addAttribute("error", "Error al guardar el producto. Por favor, revise los campos.");
-            modelo.addAttribute("unidadesMedida", UnidadMedida.values());
-            return "productos";
-        }
-
-        try {
-            productoService.create(request, file);
-        } catch (IllegalArgumentException e) {
-            modelo.addAttribute("error", e.getMessage());
-            modelo.addAttribute("unidadesMedida", UnidadMedida.values());
-            return "productos";
-        }
-
-        redirectAttributes.addFlashAttribute("mensaje", "Producto guardado exitosamente");
-        return "redirect:/productos";
+    public ResponseEntity<ProductoResponse> createProducto(@Valid @RequestPart("producto") ProductoRequest request,
+                                                           @RequestPart(value = "file", required = false) MultipartFile file) {
+        ProductoResponse response = productoService.create(request, file);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @GetMapping("/update/{id}")
-    public String showUpdate(@PathVariable Long id, Model modelo) {
-        ProductoResponse producto = productoService.findById(id);
-        modelo.addAttribute("producto", producto);
-        return "producto/actualizarProducto";
+    @PutMapping("/{id}")
+    public ResponseEntity<ProductoResponse> updateProducto(@PathVariable Long id, @Valid @RequestBody ProductoRequest request) {
+        ProductoResponse response = productoService.update(id, request);
+        return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/update/{id}")
-    public String update(@PathVariable Long id,
-                         @Valid @ModelAttribute("producto") ProductoRequest solicitudDto,
-                         BindingResult result,
-                         RedirectAttributes redirectAttributes) {
-
-        if (result.hasErrors()) {
-            return "producto/actualizarProducto";
-        }
-
-        productoService.update(id, solicitudDto);
-        redirectAttributes.addFlashAttribute("mensaje", "Producto actualizado");
-        return "redirect:/productos/" + id;
-    }
-
-    @PostMapping("/delete/{id}")
-    public String delete(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteProducto(@PathVariable Long id) {
         productoService.delete(id);
-        redirectAttributes.addFlashAttribute("mensaje", "Producto eliminado");
-        return "redirect:/";
+        return ResponseEntity.noContent().build();
     }
 }

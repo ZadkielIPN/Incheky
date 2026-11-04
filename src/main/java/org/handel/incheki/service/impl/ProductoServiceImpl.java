@@ -58,6 +58,22 @@ public class ProductoServiceImpl implements ProductoService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public Page<ProductoResponse> findAll(String q, Pageable pageable) {
+        Page<Producto> productosPage;
+
+        if (q != null && !q.isBlank()) {
+            productosPage = productoRepository.findByNombreContainingIgnoreCaseOrDescripcionContainingIgnoreCase(
+                    q, q, pageable
+            );
+        } else {
+            productosPage = productoRepository.findAll(pageable);
+        }
+
+        return productosPage.map(productoMapper::toResponse);
+    }
+
+    @Override
     @Transactional
     public ProductoResponse update(Long id, ProductoRequest request) {
         Producto producto = findProductoById(id);

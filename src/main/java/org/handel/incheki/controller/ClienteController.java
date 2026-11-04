@@ -3,37 +3,47 @@ package org.handel.incheki.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.handel.incheki.dtos.request.ClienteRequest;
-import org.handel.incheki.repository.ClienteRepository;
+import org.handel.incheki.dtos.response.ClienteResponse;
 import org.handel.incheki.service.ClienteService;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("/clientes")
 @RequiredArgsConstructor
 public class ClienteController {
     private final ClienteService clienteService;
 
-    @GetMapping("/create")
-    public String showCreate(Model model) {
-        model.addAttribute("clienteDto", new ClienteRequest());
-        return "registro";
+    @GetMapping("/{id}")
+    public ResponseEntity<ClienteResponse> getAbastecimientoById(@PathVariable Long id) {
+        ClienteResponse response = clienteService.findById(id);
+        return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/create")
-    public String create(@Valid @ModelAttribute("clienteDto") ClienteRequest request,
-                              BindingResult result, RedirectAttributes redirectAttributes) {
-        if (result.hasErrors()) return "registro";
+    @GetMapping
+    public ResponseEntity<Page<ClienteResponse>> getAllAbastecimientos(Pageable pageable) {
+        Page<ClienteResponse> response = clienteService.findAll(pageable);
+        return ResponseEntity.ok(response);
+    }
 
-        clienteService.create(request);
+    @PostMapping
+    public ResponseEntity<ClienteResponse> createAbastecimiento(@Valid @RequestBody ClienteRequest request) {
+        ClienteResponse response = clienteService.create(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
 
-        redirectAttributes.addFlashAttribute("mensaje", "Cuenta creada correctamente.");
-        return "redirect:/login";
+    @PutMapping("/{id}")
+    public ResponseEntity<ClienteResponse> updateAbastecimiento(@PathVariable Long id, @Valid @RequestBody ClienteRequest request) {
+        ClienteResponse response = clienteService.update(id, request);
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteAbastecimiento(@PathVariable Long id) {
+        clienteService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -3,59 +3,49 @@ package org.handel.incheki.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.handel.incheki.dtos.request.DetalleAbastecimientoRequest;
-import org.handel.incheki.model.DetalleAbastecimiento;
-import org.handel.incheki.repository.DetalleAbastecimientoRepository;
+import org.handel.incheki.dtos.response.DetalleAbastecimientoResponse;
 import org.handel.incheki.service.DetalleAbastecimientoService;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-@Controller
-@RequestMapping("/detalle-abastecimiento")
+@RestController
+@RequestMapping("/detalle-abastecimientos")
 @RequiredArgsConstructor
 public class DetalleAbastecimientoController {
-    private final DetalleAbastecimientoService detalleAbastecimientoService;
-    private final DetalleAbastecimientoRepository detalleAbastecimientoRepository;
+    private final DetalleAbastecimientoService detalleDetalleAbastecimientoService;
+
+
+    @GetMapping("/{id}")
+    public ResponseEntity<DetalleAbastecimientoResponse> getDetalleAbastecimientoById(@PathVariable Long id) {
+        DetalleAbastecimientoResponse response = detalleDetalleAbastecimientoService.findById(id);
+        return ResponseEntity.ok(response);
+    }
 
     @GetMapping
-    public String detalleAbastecimientos(Model model) {
-        model.addAttribute("detalleAbastecimientos", detalleAbastecimientoRepository.findAll(Sort.by("nombre")));
-        model.addAttribute("detalleAbastecimiento", new DetalleAbastecimiento());
-        return "detalleAbastecimientos";
+    public ResponseEntity<Page<DetalleAbastecimientoResponse>> getAllDetalleAbastecimientos(Pageable pageable) {
+        Page<DetalleAbastecimientoResponse> response = detalleDetalleAbastecimientoService.findAll(pageable);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping
-    public String crearDetalleAbastecimiento(@Valid @ModelAttribute("detalleAbastecimiento") DetalleAbastecimientoRequest request,
-                                 BindingResult result, RedirectAttributes redirectAttributes) {
-        if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("error", "Revisa los datos del detalleAbastecimiento.");
-            return "redirect:/detalleAbastecimientos";
-        }
-        detalleAbastecimientoService.create(request);
-        redirectAttributes.addFlashAttribute("mensaje", "Detalle Abastecimiento registrado correctamente.");
-        return "redirect:/detalleAbastecimientos";
+    public ResponseEntity<DetalleAbastecimientoResponse> createDetalleAbastecimiento(@Valid @RequestBody DetalleAbastecimientoRequest request) {
+        DetalleAbastecimientoResponse response = detalleDetalleAbastecimientoService.create(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PostMapping("actualizar/{id}")
-    public String update(@Valid @ModelAttribute("detalleAbastecimiento") DetalleAbastecimientoRequest request,
-                         @PathVariable Long id,
-                         BindingResult result, RedirectAttributes redirectAttributes) {
-        if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("error", "Revisa los datos del detalleAbastecimiento.");
-            return "redirect:/detalleAbastecimientos";
-        }
-        detalleAbastecimientoService.update(id, request);
-        redirectAttributes.addFlashAttribute("mensaje", "Detalle Abastecimiento actualizado correctamente.");
-        return "redirect:/detalleAbastecimientos";
+    @PutMapping("/{id}")
+    public ResponseEntity<DetalleAbastecimientoResponse> updateDetalleAbastecimiento(@PathVariable Long id, @Valid @RequestBody DetalleAbastecimientoRequest request) {
+        DetalleAbastecimientoResponse response = detalleDetalleAbastecimientoService.update(id, request);
+        return ResponseEntity.ok(response);
     }
 
-    @PostMapping("eliminar/{id}")
-    public String delete(@PathVariable Long id, RedirectAttributes redirectAttributes) {
-        detalleAbastecimientoService.delete(id);
-        redirectAttributes.addFlashAttribute("mensaje", "Detalle Abastecimiento eliminado correctamente.");
-        return "redirect:/detalleAbastecimientos";
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteDetalleAbastecimiento(@PathVariable Long id) {
+        detalleDetalleAbastecimientoService.delete(id);
+        return ResponseEntity.noContent().build();
     }
+    
 }
