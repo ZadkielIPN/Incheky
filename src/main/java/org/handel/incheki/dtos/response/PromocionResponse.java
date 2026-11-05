@@ -14,7 +14,6 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PromocionResponse {
-
     private Long id;
     private String nombre;
     private BigDecimal porcentajeDescuento;

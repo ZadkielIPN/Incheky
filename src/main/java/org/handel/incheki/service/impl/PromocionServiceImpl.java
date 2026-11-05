@@ -15,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
+
 @Service
 @RequiredArgsConstructor
 public class PromocionServiceImpl implements PromocionService {
@@ -26,7 +28,7 @@ public class PromocionServiceImpl implements PromocionService {
     @Transactional
     public PromocionResponse create(PromocionRequest request) {
         Promocion promocion = promocionMapper.toEntity(request);
-        promocion.setProductos(new java.util.HashSet<>());
+        promocion.setProductos(new HashSet<>());
         promocionRepository.save(promocion);
         syncProducts(promocion, request.getProductoIds());
         return promocionMapper.toResponse(promocion);
@@ -56,7 +58,7 @@ public class PromocionServiceImpl implements PromocionService {
         promocion.getProductos().forEach(producto -> producto.getPromociones().remove(promocion));
         promocion.getProductos().clear();
         promocionMapper.update(request, promocion);
-        promocion.setProductos(new java.util.HashSet<>());
+        promocion.setProductos(new HashSet<>());
         syncProducts(promocion, request.getProductoIds());
         return promocionMapper.toResponse(promocion);
     }
