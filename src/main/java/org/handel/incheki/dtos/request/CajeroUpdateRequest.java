@@ -32,10 +32,6 @@ public class CajeroUpdateRequest {
     private String contrasena;
 
     @NotNull
-    @Min(1)
-    private Long numeroEmpleado;
-
-    @NotNull
     private Turno turno;
 
     @NotNull

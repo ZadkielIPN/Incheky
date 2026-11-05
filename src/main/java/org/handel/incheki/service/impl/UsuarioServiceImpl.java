@@ -67,11 +67,15 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<UsuarioResponse> findAll(Rol rol, Pageable paginable) {
+    public Page<UsuarioResponse> findAll(Rol rol, String query, Pageable paginable) {
         Page<Usuario> users;
 
         if (rol != null) {
             users = usuarioRepository.findAllByRol(rol, paginable);
+        } else if (query != null && !query.isBlank()) {
+            users = usuarioRepository
+                    .findByNombreContainingIgnoreCaseOrApellidoContainingIgnoreCaseOrEmailContainingIgnoreCase(
+                            query.trim(), query.trim(), query.trim(), paginable);
         } else {
             users = usuarioRepository.findAll(paginable);
         }

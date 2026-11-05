@@ -25,8 +25,9 @@ public class UsuarioController {
 
     @GetMapping
     public ResponseEntity<Page<UsuarioResponse>> getAllUsuarios(@RequestParam(required = false) Rol rol,
+                                                                @RequestParam(required = false) String q,
                                                                 Pageable pageable) {
-        Page<UsuarioResponse> response = usuarioService.findAll(rol, pageable);
+        Page<UsuarioResponse> response = usuarioService.findAll(rol, q, pageable);
         return ResponseEntity.ok(response);
     }
 

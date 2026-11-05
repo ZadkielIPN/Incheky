@@ -17,6 +17,7 @@ public interface CajeroMapper {
     @Mapping(target = "id", ignore = true)
     @BeanMapping(builder = @Builder(disableBuilder = true))
     @Mapping(target = "rol", ignore = true)
+    @Mapping(target = "numeroEmpleado", ignore = true)
     Cajero toEntity(CajeroCreateRequest request);
 
     CajeroResponse toResponse(Cajero entity);
@@ -24,6 +25,7 @@ public interface CajeroMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "rol", ignore = true)
+    @Mapping(target = "numeroEmpleado", ignore = true)
     @Mapping(target = "contrasena", ignore = true)
     void update(CajeroUpdateRequest request, @MappingTarget Cajero cajero);
 }

@@ -9,6 +9,7 @@ import org.handel.incheki.exceptions.ResourcesNotFoundException;
 import org.handel.incheki.mappers.CajeroMapper;
 import org.handel.incheki.model.Cajero;
 import org.handel.incheki.repository.CajeroRepository;
+import org.handel.incheki.repository.UsuarioRepository;
 import org.handel.incheki.service.CajeroService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class CajeroServiceImpl implements CajeroService {
     private final CajeroRepository cajeroRepository;
     private final CajeroMapper cajeroMapper;
+    private final UsuarioRepository usuarioRepository;
 
     @Override
     @Transactional
@@ -27,6 +29,7 @@ public class CajeroServiceImpl implements CajeroService {
         Cajero cajero = cajeroMapper.toEntity(request);
 
         cajero.setRol(Rol.CAJERO);
+        cajero.setNumeroEmpleado(siguienteNumero());
 
         cajeroRepository.save(cajero);
         return cajeroMapper.toResponse(cajero);
@@ -72,5 +75,9 @@ public class CajeroServiceImpl implements CajeroService {
     private Cajero findCajeroById(Long id) {
         return cajeroRepository.findById(id)
                 .orElseThrow(() -> new ResourcesNotFoundException("Cajero con id " + id + " no encontrado"));
+    }
+
+    private Long siguienteNumero() {
+        return usuarioRepository.findMaxNumeroEmpleado() + 1;
     }
 }

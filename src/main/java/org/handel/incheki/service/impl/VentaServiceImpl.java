@@ -116,10 +116,17 @@ public class VentaServiceImpl implements VentaService {
                 .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
         int puntosDisponibles = Math.max(cliente.getPuntos(), 0);
         int puntosSolicitados = Math.max(request.getPuntosUtilizados(), 0);
-        int puntosUtilizados = Math.min(puntosSolicitados, puntosDisponibles);
-        BigDecimal descuentoPuntos = BigDecimal.valueOf(puntosUtilizados);
         BigDecimal total = subtotalConPromociones
                 .subtract(descuentoLealtad)
+                .setScale(2, RoundingMode.HALF_UP);
+        int puntosPorSaldo = total
+                .divide(BigDecimal.valueOf(0.50), 0, RoundingMode.FLOOR)
+                .intValue();
+        int puntosUtilizados = Math.min(puntosSolicitados, Math.min(puntosDisponibles, puntosPorSaldo));
+        BigDecimal descuentoPuntos = BigDecimal.valueOf(puntosUtilizados)
+                .multiply(BigDecimal.valueOf(0.50))
+                .setScale(2, RoundingMode.HALF_UP);
+        total = total
                 .subtract(descuentoPuntos)
                 .max(BigDecimal.ZERO)
                 .setScale(2, RoundingMode.HALF_UP);

@@ -11,7 +11,7 @@ public interface UsuarioService {
 
     UsuarioResponse findById(Long id);
 
-    Page<UsuarioResponse> findAll(Rol rol, Pageable paginable);
+    Page<UsuarioResponse> findAll(Rol rol, String query, Pageable paginable);
 
     UsuarioSession login(String email, String password);
 
