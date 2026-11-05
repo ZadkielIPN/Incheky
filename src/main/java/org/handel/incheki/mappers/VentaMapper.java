@@ -49,5 +49,25 @@ public interface VentaMapper {
 
     @Mapping(target = "cajeroId", source = "cajero", qualifiedByName = "toCajeroId")
     @Mapping(target = "clienteId", source = "cliente", qualifiedByName = "toClienteId")
-    VentaResponse toResponse(Venta entity);
+    @Mapping(target = "cajeroNombre", ignore = true)
+    @Mapping(target = "clienteNombre", ignore = true)
+    VentaResponse toResponseInternal(Venta entity);
+
+    default VentaResponse toResponse(Venta entity) {
+        VentaResponse response = toResponseInternal(entity);
+        if (entity.getCajero() != null) {
+            response.setCajeroNombre(formatName(entity.getCajero().getId(), entity.getCajero().getNombre(),
+                    entity.getCajero().getApellido()));
+        }
+        if (entity.getCliente() != null) {
+            response.setClienteNombre(formatName(entity.getCliente().getId(), entity.getCliente().getNombre(),
+                    entity.getCliente().getApellido()));
+        }
+        return response;
+    }
+
+    default String formatName(Long id, String nombre, String apellido) {
+        String fullName = (nombre + " " + apellido).trim();
+        return id + " - " + fullName;
+    }
 }

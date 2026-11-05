@@ -18,6 +18,7 @@ public class AbastecimientoResponse {
     private Long id;
     private LocalDateTime fecha;
     private Long proveedorId;
+    private String proveedorNombre;
     private List<DetalleAbastecimientoResponse> detalles;
     private BigDecimal total;
 }

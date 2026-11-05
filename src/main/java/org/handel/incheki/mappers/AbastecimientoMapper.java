@@ -42,5 +42,14 @@ public interface AbastecimientoMapper {
     }
 
     @Mapping(target = "proveedorId", source = "proveedor", qualifiedByName = "toProveedorId")
-    AbastecimientoResponse toResponse(Abastecimiento entity);
+    @Mapping(target = "proveedorNombre", ignore = true)
+    AbastecimientoResponse toResponseInternal(Abastecimiento entity);
+
+    default AbastecimientoResponse toResponse(Abastecimiento entity) {
+        AbastecimientoResponse response = toResponseInternal(entity);
+        if (entity.getProveedor() != null) {
+            response.setProveedorNombre(entity.getProveedor().getId() + " - " + entity.getProveedor().getNombre());
+        }
+        return response;
+    }
 }

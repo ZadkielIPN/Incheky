@@ -19,7 +19,9 @@ public class VentaResponse {
     private Long id;
     private LocalDateTime fecha;
     private Long cajeroId;
+    private String cajeroNombre;
     private Long clienteId;
+    private String clienteNombre;
     private List<DetalleVentaResponse> detalles;
     private BigDecimal total;
     private BigDecimal descuentoPorPuntos;
