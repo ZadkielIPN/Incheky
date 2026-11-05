@@ -1,9 +1,12 @@
 package org.handel.incheki.controller;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.handel.incheki.dtos.request.VentaRequest;
+import org.handel.incheki.dtos.UsuarioSession;
 import org.handel.incheki.dtos.response.VentaResponse;
+import org.handel.incheki.enums.Rol;
 import org.handel.incheki.model.Venta;
 import org.handel.incheki.repository.VentaRepository;
 import org.handel.incheki.service.VentaService;
@@ -35,6 +38,20 @@ public class VentaController {
     public ResponseEntity<Page<VentaResponse>> getAllVentas(Pageable pageable) {
         Page<VentaResponse> response = ventaService.findAll(pageable);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/mis-compras")
+    public ResponseEntity<Page<VentaResponse>> getMyPurchases(
+            Pageable pageable,
+            HttpSession session) {
+        Object value = session.getAttribute("usuarioLogueado");
+        if (!(value instanceof UsuarioSession usuario)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        if (usuario.getRol() != Rol.CLIENTE) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        return ResponseEntity.ok(ventaService.findByClienteId(usuario.getId(), pageable));
     }
 
     @PostMapping

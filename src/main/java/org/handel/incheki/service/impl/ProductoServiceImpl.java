@@ -74,6 +74,18 @@ public class ProductoServiceImpl implements ProductoService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public Page<ProductoResponse> findCatalog(String q, Pageable pageable) {
+        Page<Producto> productosPage;
+
+        productosPage = productoRepository.findCatalog(
+                q == null || q.isBlank() ? null : q.trim(),
+                pageable);
+
+        return productosPage.map(productoMapper::toResponse);
+    }
+
+    @Override
     @Transactional
     public ProductoResponse update(Long id, ProductoRequest request) {
         Producto producto = findProductoById(id);

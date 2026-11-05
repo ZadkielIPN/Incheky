@@ -44,6 +44,13 @@ public class VentaServiceImpl implements VentaService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public Page<VentaResponse> findByClienteId(Long clienteId, Pageable pageable) {
+        return ventaRepository.findByClienteId(clienteId, pageable)
+                .map(ventaMapper::toResponse);
+    }
+
+    @Override
     @Transactional
     public VentaResponse update(Long id, VentaRequest request) {
         Venta venta = findVentaById(id);

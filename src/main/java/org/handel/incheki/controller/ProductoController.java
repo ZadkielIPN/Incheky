@@ -19,6 +19,12 @@ import org.springframework.web.multipart.MultipartFile;
 public class ProductoController {
     final ProductoService productoService;
 
+    @GetMapping("/catalogo")
+    public ResponseEntity<Page<ProductoResponse>> getCatalogo(
+            @RequestParam(required = false) String q,
+            Pageable pageable) {
+        return ResponseEntity.ok(productoService.findCatalog(q, pageable));
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<ProductoResponse> getProductoById(@PathVariable Long id) {

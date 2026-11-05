@@ -1,6 +1,7 @@
 package org.handel.incheki.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.handel.incheki.dtos.request.UsuarioProfileRequest;
 import org.handel.incheki.dtos.UsuarioSession;
 import org.handel.incheki.dtos.response.UsuarioResponse;
 import org.handel.incheki.model.Usuario;
@@ -39,6 +40,29 @@ public class UsuarioServiceImpl implements UsuarioService {
         }
 
         return usuarioMapper.toSession(usuario);
+    }
+
+    @Override
+    @Transactional
+    public UsuarioResponse updateProfile(Long id, UsuarioProfileRequest request) {
+        Usuario usuario = findUserById(id);
+
+        usuarioRepository.findByEmail(request.getEmail())
+                .filter(existing -> !existing.getId().equals(id))
+                .ifPresent(existing -> {
+                    throw new org.handel.incheki.exceptions.EmailDuplicadoException(
+                            "El email " + request.getEmail() + " ya está registrado");
+                });
+
+        usuario.setNombre(request.getNombre());
+        usuario.setApellido(request.getApellido());
+        usuario.setEmail(request.getEmail());
+
+        if (request.getContrasena() != null && !request.getContrasena().isBlank()) {
+            usuario.setContrasena(request.getContrasena());
+        }
+
+        return usuarioMapper.toResponse(usuarioRepository.save(usuario));
     }
 
     @Override

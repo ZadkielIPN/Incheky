@@ -12,6 +12,8 @@ public interface VentaService {
 
     Page<VentaResponse> findAll(Pageable pageable);
 
+    Page<VentaResponse> findByClienteId(Long clienteId, Pageable pageable);
+
     VentaResponse update(Long id, VentaRequest request);
 
     void delete(Long id);

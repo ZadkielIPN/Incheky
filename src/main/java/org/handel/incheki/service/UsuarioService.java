@@ -1,6 +1,7 @@
 package org.handel.incheki.service;
 
 import org.handel.incheki.dtos.UsuarioSession;
+import org.handel.incheki.dtos.request.UsuarioProfileRequest;
 import org.handel.incheki.dtos.response.UsuarioResponse;
 import org.handel.incheki.enums.Rol;
 import org.springframework.data.domain.Page;
@@ -13,6 +14,8 @@ public interface UsuarioService {
     Page<UsuarioResponse> findAll(Rol rol, Pageable paginable);
 
     UsuarioSession login(String email, String password);
+
+    UsuarioResponse updateProfile(Long id, UsuarioProfileRequest request);
 
     void delete(Long id);
 
