@@ -24,6 +24,7 @@ public class VentaRequest {
     @NotNull
     private Long cajeroId;
 
+    @NotNull
     private Long clienteId;
 
     @Valid

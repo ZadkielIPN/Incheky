@@ -2,11 +2,14 @@ package org.handel.incheki.service;
 
 import org.handel.incheki.dtos.request.VentaRequest;
 import org.handel.incheki.dtos.response.VentaResponse;
+import org.handel.incheki.dtos.UsuarioSession;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface VentaService {
     VentaResponse create(VentaRequest request);
+
+    VentaResponse create(VentaRequest request, UsuarioSession sessionUser);
 
     VentaResponse findById(Long id);
 

@@ -55,8 +55,15 @@ public class VentaController {
     }
 
     @PostMapping
-    public ResponseEntity<VentaResponse> createVenta(@Valid @RequestBody VentaRequest request) {
-        VentaResponse response = ventaService.create(request);
+    public ResponseEntity<VentaResponse> createVenta(
+            @Valid @RequestBody VentaRequest request,
+            HttpSession session) {
+        Object value = session.getAttribute("usuarioLogueado");
+        if (!(value instanceof UsuarioSession usuario)
+                || (usuario.getRol() != Rol.CAJERO && usuario.getRol() != Rol.ADMINISTRADOR)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        VentaResponse response = ventaService.create(request, usuario);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
