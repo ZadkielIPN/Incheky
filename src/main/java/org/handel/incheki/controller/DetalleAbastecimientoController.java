@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/detalle-abastecimientos")
+@RequestMapping("/api/detalle-abastecimientos")
 @RequiredArgsConstructor
 public class DetalleAbastecimientoController {
     private final DetalleAbastecimientoService detalleDetalleAbastecimientoService;
