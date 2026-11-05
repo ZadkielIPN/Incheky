@@ -38,8 +38,12 @@ public class ProveedorServiceImpl implements ProveedorService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<ProveedorResponse> findAll(Pageable pageable) {
-        return proveedorRepository.findAll(pageable)
+    public Page<ProveedorResponse> findAll(String query, Pageable pageable) {
+        Page<Proveedor> proveedores = query == null || query.isBlank()
+                ? proveedorRepository.findAll(pageable)
+                : proveedorRepository.findByNombreContainingIgnoreCaseOrTelefonoContainingIgnoreCaseOrEmailContainingIgnoreCaseOrDireccionContainingIgnoreCase(
+                        query, query, query, query, pageable);
+        return proveedores
                 .map(proveedorMapper::toResponse);
     }
 

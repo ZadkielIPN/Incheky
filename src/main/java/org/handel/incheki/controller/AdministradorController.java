@@ -26,8 +26,9 @@ public class AdministradorController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<AdministradorResponse>> getAllAbastecimientos(Pageable pageable) {
-        Page<AdministradorResponse> response = administradorService.findAll(pageable);
+    public ResponseEntity<Page<AdministradorResponse>> getAllAbastecimientos(
+            @RequestParam(required = false) String q, Pageable pageable) {
+        Page<AdministradorResponse> response = administradorService.findAll(q, pageable);
         return ResponseEntity.ok(response);
     }
 

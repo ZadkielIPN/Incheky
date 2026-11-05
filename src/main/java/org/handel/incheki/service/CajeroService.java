@@ -11,7 +11,7 @@ public interface CajeroService {
 
     CajeroResponse findById(Long id);
 
-    Page<CajeroResponse> findAll(Pageable pageable);
+    Page<CajeroResponse> findAll(String query, Pageable pageable);
 
     CajeroResponse update(Long id, CajeroUpdateRequest request);
 

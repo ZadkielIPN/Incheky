@@ -42,8 +42,12 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<ClienteResponse> findAll(Pageable pageable) {
-        return clienteRepository.findAll(pageable)
+    public Page<ClienteResponse> findAll(String query, Pageable pageable) {
+        Page<Cliente> clientes = query == null || query.isBlank()
+                ? clienteRepository.findAll(pageable)
+                : clienteRepository.findByNombreContainingIgnoreCaseOrApellidoContainingIgnoreCaseOrEmailContainingIgnoreCase(
+                        query, query, query, pageable);
+        return clientes
                 .map(clienteMapper::toResponse);
     }
 

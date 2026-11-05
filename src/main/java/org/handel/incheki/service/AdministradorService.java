@@ -11,7 +11,7 @@ public interface AdministradorService {
 
     AdministradorResponse findById(Long id);
 
-    Page<AdministradorResponse> findAll(Pageable pageable);
+    Page<AdministradorResponse> findAll(String query, Pageable pageable);
 
     AdministradorResponse update(Long id, AdministradorUpdateRequest request);
 

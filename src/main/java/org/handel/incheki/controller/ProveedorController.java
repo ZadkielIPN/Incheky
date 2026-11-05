@@ -24,8 +24,9 @@ public class ProveedorController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ProveedorResponse>> getAllProveedors(Pageable pageable) {
-        Page<ProveedorResponse> response = proveedorService.findAll(pageable);
+    public ResponseEntity<Page<ProveedorResponse>> getAllProveedors(
+            @RequestParam(required = false) String q, Pageable pageable) {
+        Page<ProveedorResponse> response = proveedorService.findAll(q, pageable);
         return ResponseEntity.ok(response);
     }
 

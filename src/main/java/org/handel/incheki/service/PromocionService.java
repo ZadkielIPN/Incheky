@@ -11,7 +11,7 @@ public interface PromocionService {
 
     PromocionResponse findById(Long id);
 
-    Page<PromocionResponse> findAll(Pageable pageable);
+    Page<PromocionResponse> findAll(String query, Pageable pageable);
 
     PromocionResponse update(Long id, PromocionRequest request);
 

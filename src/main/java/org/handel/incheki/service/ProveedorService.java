@@ -10,7 +10,7 @@ public interface ProveedorService {
 
     ProveedorResponse findById(Long id);
 
-    Page<ProveedorResponse> findAll(Pageable pageable);
+    Page<ProveedorResponse> findAll(String query, Pageable pageable);
 
     ProveedorResponse update(Long id, ProveedorRequest request);
 

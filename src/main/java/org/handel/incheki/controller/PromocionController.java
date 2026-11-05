@@ -31,8 +31,9 @@ public class PromocionController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<PromocionResponse>> getAllPromocions(Pageable pageable) {
-        Page<PromocionResponse> response = promocionService.findAll(pageable);
+    public ResponseEntity<Page<PromocionResponse>> getAllPromocions(
+            @RequestParam(required = false) String q, Pageable pageable) {
+        Page<PromocionResponse> response = promocionService.findAll(q, pageable);
         return ResponseEntity.ok(response);
     }
 

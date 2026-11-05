@@ -25,8 +25,9 @@ public class ClienteController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<ClienteResponse>> getAllAbastecimientos(Pageable pageable) {
-        Page<ClienteResponse> response = clienteService.findAll(pageable);
+    public ResponseEntity<Page<ClienteResponse>> getAllAbastecimientos(
+            @RequestParam(required = false) String q, Pageable pageable) {
+        Page<ClienteResponse> response = clienteService.findAll(q, pageable);
         return ResponseEntity.ok(response);
     }
 

@@ -50,8 +50,12 @@ public class AdministradorServiceImpl implements AdministradorService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<AdministradorResponse> findAll(Pageable pageable) {
-        return administradorRepository.findAll(pageable)
+    public Page<AdministradorResponse> findAll(String query, Pageable pageable) {
+        Page<Administrador> administradores = query == null || query.isBlank()
+                ? administradorRepository.findAll(pageable)
+                : administradorRepository.findByNombreContainingIgnoreCaseOrApellidoContainingIgnoreCaseOrEmailContainingIgnoreCase(
+                        query, query, query, pageable);
+        return administradores
                 .map(administradorMapper::toResponse);
     }
 

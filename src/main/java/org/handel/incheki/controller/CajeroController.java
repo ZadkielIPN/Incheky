@@ -27,8 +27,9 @@ public class CajeroController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<CajeroResponse>> getAllAbastecimientos(Pageable pageable) {
-        Page<CajeroResponse> response = cajeroService.findAll(pageable);
+    public ResponseEntity<Page<CajeroResponse>> getAllAbastecimientos(
+            @RequestParam(required = false) String q, Pageable pageable) {
+        Page<CajeroResponse> response = cajeroService.findAll(q, pageable);
         return ResponseEntity.ok(response);
     }
 

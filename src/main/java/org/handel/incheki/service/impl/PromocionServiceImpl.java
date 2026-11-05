@@ -42,8 +42,10 @@ public class PromocionServiceImpl implements PromocionService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<PromocionResponse> findAll(Pageable pageable) {
-        return promocionRepository.findAll(pageable)
+    public Page<PromocionResponse> findAll(String query, Pageable pageable) {
+        return (query == null || query.isBlank()
+                ? promocionRepository.findAll(pageable)
+                : promocionRepository.findByNombreContainingIgnoreCase(query, pageable))
                 .map(promocionMapper::toResponse);
     }
 

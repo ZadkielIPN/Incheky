@@ -107,7 +107,12 @@ public class VentaServiceImpl implements VentaService {
             detalle.setDescuentoImporte(descuento);
             detalle.setImpuestoImporte(BigDecimal.ZERO);
             detalle.setTotal(totalDetalle);
-            detalle.setPromocion(null);
+            detalle.setPromocion(producto.getPromociones().stream()
+                    .filter(item -> item.isActiva()
+                            && !item.getFechaInicio().isAfter(LocalDate.now())
+                            && (item.getFechaFin() == null || !item.getFechaFin().isBefore(LocalDate.now())))
+                    .max((left, right) -> left.getPorcentajeDescuento().compareTo(right.getPorcentajeDescuento()))
+                    .orElse(null));
             subtotalConPromociones = subtotalConPromociones.add(totalDetalle);
         }
 

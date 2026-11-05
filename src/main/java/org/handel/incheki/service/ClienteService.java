@@ -11,7 +11,7 @@ public interface ClienteService {
 
     ClienteResponse findById(Long id);
 
-    Page<ClienteResponse> findAll(Pageable pageable);
+    Page<ClienteResponse> findAll(String query, Pageable pageable);
 
     ClienteResponse update(Long id, ClienteUpdateRequest request);
 

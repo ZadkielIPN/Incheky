@@ -45,8 +45,12 @@ public class CajeroServiceImpl implements CajeroService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<CajeroResponse> findAll(Pageable pageable) {
-        return cajeroRepository.findAll(pageable)
+    public Page<CajeroResponse> findAll(String query, Pageable pageable) {
+        Page<Cajero> cajeros = query == null || query.isBlank()
+                ? cajeroRepository.findAll(pageable)
+                : cajeroRepository.findByNombreContainingIgnoreCaseOrApellidoContainingIgnoreCaseOrEmailContainingIgnoreCase(
+                        query, query, query, pageable);
+        return cajeros
                 .map(cajeroMapper::toResponse);
     }
 
