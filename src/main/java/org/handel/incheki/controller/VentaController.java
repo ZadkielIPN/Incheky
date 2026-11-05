@@ -20,6 +20,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/api/ventas")
@@ -69,13 +70,15 @@ public class VentaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<VentaResponse> updateVenta(@PathVariable Long id, @Valid @RequestBody VentaRequest request) {
-        VentaResponse response = ventaService.update(id, request);
-        return ResponseEntity.ok(response);
+        throw new ResponseStatusException(
+                HttpStatus.METHOD_NOT_ALLOWED,
+                "Las ventas registradas no se pueden editar.");
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteVenta(@PathVariable Long id) {
-        ventaService.delete(id);
-        return ResponseEntity.noContent().build();
+        throw new ResponseStatusException(
+                HttpStatus.METHOD_NOT_ALLOWED,
+                "Las ventas registradas no se pueden eliminar.");
     }
 }
