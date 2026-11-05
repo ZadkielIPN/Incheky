@@ -6,7 +6,9 @@ import org.handel.incheki.dtos.response.PromocionResponse;
 import org.handel.incheki.exceptions.ResourcesNotFoundException;
 import org.handel.incheki.mappers.PromocionMapper;
 import org.handel.incheki.model.Promocion;
+import org.handel.incheki.model.Producto;
 import org.handel.incheki.repository.PromocionRepository;
+import org.handel.incheki.repository.ProductoRepository;
 import org.handel.incheki.service.PromocionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,13 +20,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class PromocionServiceImpl implements PromocionService {
     private final PromocionRepository promocionRepository;
     private final PromocionMapper promocionMapper;
+    private final ProductoRepository productoRepository;
 
     @Override
     @Transactional
     public PromocionResponse create(PromocionRequest request) {
         Promocion promocion = promocionMapper.toEntity(request);
-
+        promocion.setProductos(new java.util.HashSet<>());
         promocionRepository.save(promocion);
+        syncProducts(promocion, request.getProductoIds());
         return promocionMapper.toResponse(promocion);
     }
 
@@ -47,10 +51,11 @@ public class PromocionServiceImpl implements PromocionService {
     @Transactional
     public PromocionResponse update(Long id, PromocionRequest request) {
         Promocion promocion = findPromocionById(id);
-
+        promocion.getProductos().forEach(producto -> producto.getPromociones().remove(promocion));
+        promocion.getProductos().clear();
         promocionMapper.update(request, promocion);
-
-        promocionRepository.save(promocion);
+        promocion.setProductos(new java.util.HashSet<>());
+        syncProducts(promocion, request.getProductoIds());
         return promocionMapper.toResponse(promocion);
     }
 
@@ -58,12 +63,27 @@ public class PromocionServiceImpl implements PromocionService {
     @Transactional
     public void delete(Long id) {
         Promocion promocion = findPromocionById(id);
-
+        promocion.getProductos().forEach(producto -> producto.getPromociones().remove(promocion));
+        promocion.getProductos().clear();
         promocionRepository.delete(promocion);
     }
 
     private Promocion findPromocionById(Long id) {
         return promocionRepository.findById(id)
                 .orElseThrow(() -> new ResourcesNotFoundException("Promocion con id " + id + " no encontrado"));
+    }
+
+    private void syncProducts(Promocion promocion, java.util.Set<Long> productIds) {
+        if (productIds == null || productIds.isEmpty()) {
+            return;
+        }
+        var products = productoRepository.findAllById(productIds);
+        if (products.size() != productIds.size()) {
+            throw new ResourcesNotFoundException("Uno o más productos de la promoción no existen.");
+        }
+        for (Producto producto : products) {
+            producto.getPromociones().add(promocion);
+            promocion.getProductos().add(producto);
+        }
     }
 }
