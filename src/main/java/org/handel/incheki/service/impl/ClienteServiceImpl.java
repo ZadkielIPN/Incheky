@@ -1,7 +1,8 @@
 package org.handel.incheki.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.handel.incheki.dtos.request.ClienteRequest;
+import org.handel.incheki.dtos.request.ClienteCreateRequest;
+import org.handel.incheki.dtos.request.ClienteUpdateRequest;
 import org.handel.incheki.dtos.response.ClienteResponse;
 import org.handel.incheki.enums.Rol;
 import org.handel.incheki.exceptions.ResourcesNotFoundException;
@@ -22,7 +23,7 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     @Transactional
-    public ClienteResponse create(ClienteRequest request) {
+    public ClienteResponse create(ClienteCreateRequest request) {
         Cliente cliente = clienteMapper.toEntity(request);
 
         cliente.setRol(Rol.CLIENTE);
@@ -48,10 +49,13 @@ public class ClienteServiceImpl implements ClienteService {
 
     @Override
     @Transactional
-    public ClienteResponse update(Long id, ClienteRequest request) {
+    public ClienteResponse update(Long id, ClienteUpdateRequest request) {
         Cliente cliente = findClienteById(id);
 
         clienteMapper.update(request, cliente);
+        if (request.getContrasena() != null && !request.getContrasena().isBlank()) {
+            cliente.setContrasena(request.getContrasena());
+        }
 
         clienteRepository.save(cliente);
         return clienteMapper.toResponse(cliente);

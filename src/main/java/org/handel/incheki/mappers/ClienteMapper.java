@@ -1,6 +1,7 @@
 package org.handel.incheki.mappers;
 
-import org.handel.incheki.dtos.request.ClienteRequest;
+import org.handel.incheki.dtos.request.ClienteCreateRequest;
+import org.handel.incheki.dtos.request.ClienteUpdateRequest;
 import org.handel.incheki.dtos.response.ClienteResponse;
 import org.handel.incheki.model.Cliente;
 import org.mapstruct.BeanMapping;
@@ -14,12 +15,15 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 public interface ClienteMapper {
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "rol", ignore = true)
     @BeanMapping(builder = @Builder(disableBuilder = true))
-    Cliente toEntity(ClienteRequest request);
+    Cliente toEntity(ClienteCreateRequest request);
 
     ClienteResponse toResponse(Cliente entity);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "id", ignore = true)
     @Mapping(target = "rol", ignore = true)
-    void update(ClienteRequest request, @MappingTarget Cliente cliente);
+    @Mapping(target = "contrasena", ignore = true)
+    void update(ClienteUpdateRequest request, @MappingTarget Cliente cliente);
 }
