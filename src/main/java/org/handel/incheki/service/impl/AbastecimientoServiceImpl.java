@@ -39,7 +39,7 @@ public class AbastecimientoServiceImpl implements AbastecimientoService {
                 .orElseThrow(() -> new ResourcesNotFoundException(
                         "Proveedor con id " + request.getProveedorId() + " no encontrado")));
 
-        applyDetailsAndInventory(abastecimiento, false);
+        applyDetailsAndInventory(abastecimiento);
         abastecimientoRepository.save(abastecimiento);
 
         return abastecimientoMapper.toResponse(abastecimiento);
@@ -70,7 +70,7 @@ public class AbastecimientoServiceImpl implements AbastecimientoService {
         abastecimiento.setProveedor(proveedorRepository.findById(request.getProveedorId())
                 .orElseThrow(() -> new ResourcesNotFoundException(
                         "Proveedor con id " + request.getProveedorId() + " no encontrado")));
-        applyDetailsAndInventory(abastecimiento, true);
+        applyDetailsAndInventory(abastecimiento);
 
         return abastecimientoMapper.toResponse(abastecimiento);
     }
@@ -95,7 +95,7 @@ public class AbastecimientoServiceImpl implements AbastecimientoService {
         });
     }
 
-    private void applyDetailsAndInventory(Abastecimiento abastecimiento, boolean updating) {
+    private void applyDetailsAndInventory(Abastecimiento abastecimiento) {
         BigDecimal total = BigDecimal.ZERO;
         for (DetalleAbastecimiento detalle : abastecimiento.getDetalles()) {
             Producto producto = productoRepository.findByIdForUpdate(detalle.getProducto().getId())
