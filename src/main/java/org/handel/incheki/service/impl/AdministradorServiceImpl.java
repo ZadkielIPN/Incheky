@@ -1,7 +1,8 @@
 package org.handel.incheki.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.handel.incheki.dtos.request.AdministradorRequest;
+import org.handel.incheki.dtos.request.AdministradorCreateRequest;
+import org.handel.incheki.dtos.request.AdministradorUpdateRequest;
 import org.handel.incheki.dtos.response.AdministradorResponse;
 import org.handel.incheki.model.Administrador;
 import org.handel.incheki.enums.Rol;
@@ -25,7 +26,7 @@ public class AdministradorServiceImpl implements AdministradorService {
 
     @Override
     @Transactional
-    public AdministradorResponse create(AdministradorRequest request) {
+    public AdministradorResponse create(AdministradorCreateRequest request) {
         if (usuarioRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new EmailDuplicadoException("El email " + request.getEmail() + " ya está registrado");
         }
@@ -56,10 +57,13 @@ public class AdministradorServiceImpl implements AdministradorService {
 
     @Override
     @Transactional
-    public AdministradorResponse update(Long id, AdministradorRequest request) {
+    public AdministradorResponse update(Long id, AdministradorUpdateRequest request) {
         Administrador administrador = findAdministradorById(id);
 
         administradorMapper.update(request, administrador);
+        if (request.getContrasena() != null && !request.getContrasena().isBlank()) {
+            administrador.setContrasena(request.getContrasena());
+        }
 
         administradorRepository.save(administrador);
         return administradorMapper.toResponse(administrador);

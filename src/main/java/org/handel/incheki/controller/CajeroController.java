@@ -2,7 +2,8 @@ package org.handel.incheki.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.handel.incheki.dtos.request.CajeroRequest;
+import org.handel.incheki.dtos.request.CajeroCreateRequest;
+import org.handel.incheki.dtos.request.CajeroUpdateRequest;
 import org.handel.incheki.dtos.response.CajeroResponse;
 import org.handel.incheki.service.CajeroService;
 import org.springframework.data.domain.Page;
@@ -32,13 +33,13 @@ public class CajeroController {
     }
 
     @PostMapping
-    public ResponseEntity<CajeroResponse> createAbastecimiento(@Valid @RequestBody CajeroRequest request) {
+    public ResponseEntity<CajeroResponse> createAbastecimiento(@Valid @RequestBody CajeroCreateRequest request) {
         CajeroResponse response = cajeroService.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CajeroResponse> updateAbastecimiento(@PathVariable Long id, @Valid @RequestBody CajeroRequest request) {
+    public ResponseEntity<CajeroResponse> updateAbastecimiento(@PathVariable Long id, @Valid @RequestBody CajeroUpdateRequest request) {
         CajeroResponse response = cajeroService.update(id, request);
         return ResponseEntity.ok(response);
     }

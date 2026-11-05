@@ -1,7 +1,8 @@
 package org.handel.incheki.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.handel.incheki.dtos.request.CajeroRequest;
+import org.handel.incheki.dtos.request.CajeroCreateRequest;
+import org.handel.incheki.dtos.request.CajeroUpdateRequest;
 import org.handel.incheki.dtos.response.CajeroResponse;
 import org.handel.incheki.enums.Rol;
 import org.handel.incheki.exceptions.ResourcesNotFoundException;
@@ -22,7 +23,7 @@ public class CajeroServiceImpl implements CajeroService {
 
     @Override
     @Transactional
-    public CajeroResponse create(CajeroRequest request) {
+    public CajeroResponse create(CajeroCreateRequest request) {
         Cajero cajero = cajeroMapper.toEntity(request);
 
         cajero.setRol(Rol.CAJERO);
@@ -48,10 +49,13 @@ public class CajeroServiceImpl implements CajeroService {
 
     @Override
     @Transactional
-    public CajeroResponse update(Long id, CajeroRequest request) {
+    public CajeroResponse update(Long id, CajeroUpdateRequest request) {
         Cajero cajero = findCajeroById(id);
 
         cajeroMapper.update(request, cajero);
+        if (request.getContrasena() != null && !request.getContrasena().isBlank()) {
+            cajero.setContrasena(request.getContrasena());
+        }
 
         cajeroRepository.save(cajero);
         return cajeroMapper.toResponse(cajero);

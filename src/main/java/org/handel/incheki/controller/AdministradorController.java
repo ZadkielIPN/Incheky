@@ -2,7 +2,8 @@ package org.handel.incheki.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.handel.incheki.dtos.request.AdministradorRequest;
+import org.handel.incheki.dtos.request.AdministradorCreateRequest;
+import org.handel.incheki.dtos.request.AdministradorUpdateRequest;
 import org.handel.incheki.dtos.response.AdministradorResponse;
 import org.handel.incheki.service.AdministradorService;
 import org.springframework.data.domain.Page;
@@ -31,13 +32,13 @@ public class AdministradorController {
     }
 
     @PostMapping
-    public ResponseEntity<AdministradorResponse> createAbastecimiento(@Valid @RequestBody AdministradorRequest request) {
+    public ResponseEntity<AdministradorResponse> createAbastecimiento(@Valid @RequestBody AdministradorCreateRequest request) {
         AdministradorResponse response = administradorService.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AdministradorResponse> updateAbastecimiento(@PathVariable Long id, @Valid @RequestBody AdministradorRequest request) {
+    public ResponseEntity<AdministradorResponse> updateAbastecimiento(@PathVariable Long id, @Valid @RequestBody AdministradorUpdateRequest request) {
         AdministradorResponse response = administradorService.update(id, request);
         return ResponseEntity.ok(response);
     }
