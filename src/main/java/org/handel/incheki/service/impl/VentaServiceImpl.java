@@ -2,15 +2,13 @@ package org.handel.incheki.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.handel.incheki.dtos.UsuarioSession;
+import org.handel.incheki.dtos.request.DetalleVentaRequest;
 import org.handel.incheki.dtos.request.VentaRequest;
 import org.handel.incheki.dtos.response.VentaResponse;
 import org.handel.incheki.enums.Rol;
 import org.handel.incheki.exceptions.ResourcesNotFoundException;
 import org.handel.incheki.mappers.VentaMapper;
-import org.handel.incheki.model.Cliente;
-import org.handel.incheki.model.DetalleVenta;
-import org.handel.incheki.model.Producto;
-import org.handel.incheki.model.Venta;
+import org.handel.incheki.model.*;
 import org.handel.incheki.repository.CajeroRepository;
 import org.handel.incheki.repository.ClienteRepository;
 import org.handel.incheki.repository.ProductoRepository;
@@ -24,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.HashSet;
 
 @Service
@@ -64,7 +63,7 @@ public class VentaServiceImpl implements VentaService {
         Cliente cliente = clienteRepository.findById(request.getClienteId())
                 .orElseThrow(() -> new ResourcesNotFoundException("Cliente no encontrado."));
 
-        if (new HashSet<>(request.getDetalles().stream().map(detail -> detail.getProductoId()).toList()).size()
+        if (new HashSet<>(request.getDetalles().stream().map(DetalleVentaRequest::getProductoId).toList()).size()
                 != request.getDetalles().size()) {
             throw new IllegalArgumentException("No puedes agregar el mismo producto más de una vez.");
         }
@@ -92,7 +91,7 @@ public class VentaServiceImpl implements VentaService {
                     .filter(item -> item.isActiva()
                             && !item.getFechaInicio().isAfter(LocalDate.now())
                             && (item.getFechaFin() == null || !item.getFechaFin().isBefore(LocalDate.now())))
-                    .map(item -> item.getPorcentajeDescuento())
+                    .map(Promocion::getPorcentajeDescuento)
                     .max(BigDecimal::compareTo)
                     .orElse(BigDecimal.ZERO);
             BigDecimal descuento = subtotal.multiply(promo)
@@ -111,7 +110,7 @@ public class VentaServiceImpl implements VentaService {
                     .filter(item -> item.isActiva()
                             && !item.getFechaInicio().isAfter(LocalDate.now())
                             && (item.getFechaFin() == null || !item.getFechaFin().isBefore(LocalDate.now())))
-                    .max((left, right) -> left.getPorcentajeDescuento().compareTo(right.getPorcentajeDescuento()))
+                    .max(Comparator.comparing(Promocion::getPorcentajeDescuento))
                     .orElse(null));
             subtotalConPromociones = subtotalConPromociones.add(totalDetalle);
         }

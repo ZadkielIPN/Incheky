@@ -4,19 +4,12 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.handel.incheki.dtos.request.DetalleVentaRequest;
 import org.handel.incheki.dtos.response.DetalleVentaResponse;
-import org.handel.incheki.model.DetalleVenta;
-import org.handel.incheki.repository.DetalleVentaRepository;
 import org.handel.incheki.service.DetalleVentaService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @RestController
 @RequestMapping("/api/detalle-ventas")

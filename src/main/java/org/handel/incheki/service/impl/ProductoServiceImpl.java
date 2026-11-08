@@ -7,7 +7,6 @@ import org.handel.incheki.exceptions.ResourcesNotFoundException;
 import org.handel.incheki.mappers.ProductoMapper;
 import org.handel.incheki.model.Producto;
 import org.handel.incheki.repository.ProductoRepository;
-import org.handel.incheki.repository.UsuarioRepository;
 import org.handel.incheki.service.ProductoService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +19,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -116,7 +116,7 @@ public class ProductoServiceImpl implements ProductoService {
         }
         try {
             Files.createDirectories(CARPETA_IMAGENES);
-            String original = StringUtils.cleanPath(archivo.getOriginalFilename()).replaceAll("[^a-zA-Z0-9._-]", "_");
+            String original = StringUtils.cleanPath(Objects.requireNonNull(archivo.getOriginalFilename())).replaceAll("[^a-zA-Z0-9._-]", "_");
             String nombre = UUID.randomUUID() + "_" + original;
             archivo.transferTo(CARPETA_IMAGENES.resolve(nombre));
             return nombre;

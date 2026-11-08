@@ -1,7 +1,6 @@
 package org.handel.incheki.model;
 
 import jakarta.persistence.*;
-import jakarta.persistence.GenerationType;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;

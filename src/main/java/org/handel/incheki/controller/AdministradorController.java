@@ -20,32 +20,32 @@ public class AdministradorController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<AdministradorResponse> getAbastecimientoById(@PathVariable Long id) {
+    public ResponseEntity<AdministradorResponse> getAdministradorById(@PathVariable Long id) {
         AdministradorResponse response = administradorService.findById(id);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping
-    public ResponseEntity<Page<AdministradorResponse>> getAllAbastecimientos(
+    public ResponseEntity<Page<AdministradorResponse>> getAllAdministradors(
             @RequestParam(required = false) String q, Pageable pageable) {
         Page<AdministradorResponse> response = administradorService.findAll(q, pageable);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping
-    public ResponseEntity<AdministradorResponse> createAbastecimiento(@Valid @RequestBody AdministradorCreateRequest request) {
+    public ResponseEntity<AdministradorResponse> createAdministrador(@Valid @RequestBody AdministradorCreateRequest request) {
         AdministradorResponse response = administradorService.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AdministradorResponse> updateAbastecimiento(@PathVariable Long id, @Valid @RequestBody AdministradorUpdateRequest request) {
+    public ResponseEntity<AdministradorResponse> updateAdministrador(@PathVariable Long id, @Valid @RequestBody AdministradorUpdateRequest request) {
         AdministradorResponse response = administradorService.update(id, request);
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAbastecimiento(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteAdministrador(@PathVariable Long id) {
         administradorService.delete(id);
         return ResponseEntity.noContent().build();
     }

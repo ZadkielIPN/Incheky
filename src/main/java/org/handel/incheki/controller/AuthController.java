@@ -7,11 +7,9 @@ import org.handel.incheki.dtos.UsuarioSession;
 import org.handel.incheki.dtos.request.ClienteCreateRequest;
 import org.handel.incheki.dtos.request.LoginRequest;
 import org.handel.incheki.dtos.request.UsuarioProfileRequest;
-import org.handel.incheki.dtos.response.ClienteResponse;
 import org.handel.incheki.dtos.response.UsuarioResponse;
 import org.handel.incheki.service.ClienteService;
 import org.handel.incheki.service.UsuarioService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +21,7 @@ public class AuthController {
     private final ClienteService clienteService;
 
     @PostMapping("/login")
-    public ResponseEntity<UsuarioSession> procesarLogin(@Valid @RequestBody LoginRequest loginDto,
+    public ResponseEntity<UsuarioSession> login(@Valid @RequestBody LoginRequest loginDto,
                                                         HttpSession session) {
         UsuarioSession usuario = usuarioService.login(loginDto.getEmail(), loginDto.getContrasena());
 
@@ -42,8 +40,6 @@ public class AuthController {
     public ResponseEntity<UsuarioSession> register(
             @Valid @RequestBody ClienteCreateRequest request,
             HttpSession session) {
-        request.setPuntos(0);
-        request.setNivelLealtad(org.handel.incheki.enums.NivelLealtad.BRONCE);
         clienteService.create(request);
         UsuarioSession usuario = usuarioService.login(request.getEmail(), request.getContrasena());
         session.setAttribute("usuarioLogueado", usuario);

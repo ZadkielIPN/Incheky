@@ -15,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static org.handel.incheki.enums.NivelLealtad.BRONCE;
+
 @Service
 @RequiredArgsConstructor
 public class ClienteServiceImpl implements ClienteService {
@@ -26,6 +28,8 @@ public class ClienteServiceImpl implements ClienteService {
     public ClienteResponse create(ClienteCreateRequest request) {
         Cliente cliente = clienteMapper.toEntity(request);
 
+        request.setPuntos(0);
+        request.setNivelLealtad(BRONCE);
         cliente.setRol(Rol.CLIENTE);
 
         clienteRepository.save(cliente);

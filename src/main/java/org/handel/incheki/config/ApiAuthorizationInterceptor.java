@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.handel.incheki.dtos.UsuarioSession;
 import org.handel.incheki.enums.Rol;
+import org.jspecify.annotations.NonNull;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.server.ResponseStatusException;
@@ -16,7 +17,7 @@ import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 public class ApiAuthorizationInterceptor implements HandlerInterceptor {
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+    public boolean preHandle(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler) {
         String path = request.getRequestURI();
         if (!path.startsWith(request.getContextPath() + "/api/")) {
             return true;

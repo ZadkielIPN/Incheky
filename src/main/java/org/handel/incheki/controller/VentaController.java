@@ -7,19 +7,12 @@ import org.handel.incheki.dtos.request.VentaRequest;
 import org.handel.incheki.dtos.UsuarioSession;
 import org.handel.incheki.dtos.response.VentaResponse;
 import org.handel.incheki.enums.Rol;
-import org.handel.incheki.model.Venta;
-import org.handel.incheki.repository.VentaRepository;
 import org.handel.incheki.service.VentaService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController

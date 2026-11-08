@@ -74,7 +74,7 @@ public class PromocionServiceImpl implements PromocionService {
 
     private Promocion findPromocionById(Long id) {
         return promocionRepository.findById(id)
-                .orElseThrow(() -> new ResourcesNotFoundException("Promocion con id " + id + " no encontrado"));
+                .orElseThrow(() -> new ResourcesNotFoundException("Promocion con id " + id + " no encontrada"));
     }
 
     private void syncProducts(Promocion promocion, java.util.Set<Long> productIds) {

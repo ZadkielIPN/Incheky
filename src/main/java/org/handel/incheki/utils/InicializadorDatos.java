@@ -20,7 +20,7 @@ public class InicializadorDatos implements CommandLineRunner {
     private final AdministradorRepository administradorRepository;
 
     @Override
-    public void run(String ... args) throws Exception {
+    public void run(String @NonNull ... args) {
         inicializarAdministradores();
     }
 

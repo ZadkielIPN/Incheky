@@ -4,19 +4,12 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.handel.incheki.dtos.request.PromocionRequest;
 import org.handel.incheki.dtos.response.PromocionResponse;
-import org.handel.incheki.model.Promocion;
-import org.handel.incheki.repository.PromocionRepository;
 import org.handel.incheki.service.PromocionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @RestController
 @RequestMapping(("/api/promociones"))
@@ -31,7 +24,7 @@ public class PromocionController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<PromocionResponse>> getAllPromocions(
+    public ResponseEntity<Page<PromocionResponse>> getAllPromociones(
             @RequestParam(required = false) String q, Pageable pageable) {
         Page<PromocionResponse> response = promocionService.findAll(q, pageable);
         return ResponseEntity.ok(response);
