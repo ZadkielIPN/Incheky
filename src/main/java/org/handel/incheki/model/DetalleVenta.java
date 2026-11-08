@@ -5,16 +5,14 @@ import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
 @Entity
 @Getter @Setter
 @AllArgsConstructor @NoArgsConstructor
+@Builder
 @Table(
         name = "detalles_venta",
         uniqueConstraints = {
