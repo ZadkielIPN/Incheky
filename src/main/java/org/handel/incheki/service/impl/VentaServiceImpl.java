@@ -167,10 +167,8 @@ public class VentaServiceImpl implements VentaService {
                     .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
             BigDecimal totalDetalle = subtotal.subtract(descuento).setScale(2, RoundingMode.HALF_UP);
 
-            // Descontar stock en base de datos
             producto.setStock(producto.getStock() - detalle.getCantidad());
 
-            // CONSTRUCCIÓN LIMPIA USANDO LOMBOK BUILDER
             DetalleVenta detalleCalculado = DetalleVenta.builder()
                     .venta(venta)
                     .producto(producto)
@@ -188,7 +186,6 @@ public class VentaServiceImpl implements VentaService {
             subtotalConPromociones = subtotalConPromociones.add(totalDetalle);
         }
 
-        // Reemplazamos la lista con los detalles ya calculados y enriquecidos
         venta.setDetalles(detallesProcesados);
         return subtotalConPromociones;
     }
