@@ -4,7 +4,9 @@ import org.handel.incheki.model.Promocion;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface PromocionRepository extends JpaRepository<Promocion, Long> {
     Page<Promocion> findByNombreContainingIgnoreCase(String nombre, Pageable pageable);
 }
