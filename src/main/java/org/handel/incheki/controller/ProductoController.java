@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api/productos")
 @RequiredArgsConstructor
 public class ProductoController {
-    final ProductoService productoService;
+    private final ProductoService productoService;
 
     @GetMapping("/catalogo")
     public ResponseEntity<Page<ProductoResponse>> getCatalogo(

@@ -7,10 +7,13 @@ import org.handel.incheki.dtos.request.VentaRequest;
 import org.handel.incheki.dtos.UsuarioSession;
 import org.handel.incheki.dtos.response.VentaResponse;
 import org.handel.incheki.enums.Rol;
+import org.handel.incheki.service.PDFService;
 import org.handel.incheki.service.VentaService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -20,7 +23,7 @@ import org.springframework.web.server.ResponseStatusException;
 @RequiredArgsConstructor
 public class VentaController {
     private final VentaService ventaService;
-
+    private final PDFService pdfService;
 
     @GetMapping("/{id}")
     public ResponseEntity<VentaResponse> getVentaById(@PathVariable Long id) {
@@ -73,5 +76,20 @@ public class VentaController {
         throw new ResponseStatusException(
                 HttpStatus.METHOD_NOT_ALLOWED,
                 "Las ventas registradas no se pueden eliminar.");
+    }
+
+    @GetMapping("/{id}/ticket")
+    public ResponseEntity<byte[]> descargarTicketPdf(@PathVariable Long id) {
+        VentaResponse venta = ventaService.findById(id);
+
+        byte[] pdfBytes = pdfService.generarTicketPdf(venta);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("attachment", "ticket_venta_" + id + ".pdf");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(pdfBytes);
     }
 }
