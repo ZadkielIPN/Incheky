@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.format.DateTimeFormatter;
@@ -45,6 +46,15 @@ public class PDFServiceImpl implements PDFService {
             Paragraph titulo = new Paragraph("INCHEKI STORE", primaryFont);
             titulo.setAlignment(Element.ALIGN_CENTER);
             document.add(titulo);
+
+            java.net.URL imageUrl = getClass().getResource("/static/images/icono.jpg");
+            if (imageUrl != null) {
+                Image logo = Image.getInstance(imageUrl);
+                logo.scaleToFit(50, 50);
+                logo.setAlignment(Element.ALIGN_CENTER);
+                document.add(logo);
+                document.add(new Paragraph(" "));
+            }
 
             Paragraph subtitulo = new Paragraph("Ticket de Venta #" + venta.getId(), subtitleFont);
             subtitulo.setAlignment(Element.ALIGN_CENTER);
@@ -125,6 +135,8 @@ public class PDFServiceImpl implements PDFService {
             document.close();
         } catch (DocumentException e) {
             throw new RuntimeException("Error al generar el PDF del ticket", e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
         return baos.toByteArray();
