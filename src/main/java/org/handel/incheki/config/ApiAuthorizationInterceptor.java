@@ -10,11 +10,13 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 public class ApiAuthorizationInterceptor implements HandlerInterceptor {
+    private static final Pattern TICKET_PATH = Pattern.compile("^/api/ventas/\\d+/ticket$");
 
     @Override
     public boolean preHandle(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler) {
@@ -80,6 +82,12 @@ public class ApiAuthorizationInterceptor implements HandlerInterceptor {
             if (path.startsWith("/api/ventas/mis-compras")) {
                 return Set.of(Rol.CLIENTE);
             }
+            if (HttpMethod.GET.matches(method) && TICKET_PATH.matcher(path).matches()) {
+                return Set.of(Rol.CLIENTE, Rol.ADMINISTRADOR, Rol.CAJERO);
+            }
+            return Set.of(Rol.ADMINISTRADOR, Rol.CAJERO);
+        }
+        if (path.startsWith("/api/emails")) {
             return Set.of(Rol.ADMINISTRADOR, Rol.CAJERO);
         }
         return Set.of();

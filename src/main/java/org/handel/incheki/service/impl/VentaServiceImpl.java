@@ -59,7 +59,7 @@ public class VentaServiceImpl implements VentaService {
         venta.setCajero(cajero);
         venta.setCliente(cliente);
         venta.setTotal(BigDecimal.ZERO);
-        venta.setDescuentoPorPuntos(BigDecimal.ZERO);
+        venta.setDescuento(BigDecimal.ZERO);
 
         BigDecimal subtotalConPromociones = procesarDetallesVenta(venta);
 
@@ -223,7 +223,7 @@ public class VentaServiceImpl implements VentaService {
 
         venta.setPuntosUtilizados(puntosUtilizados);
         venta.setPuntosGanados(puntosGanados);
-        venta.setDescuentoPorPuntos(descuentoPuntos.add(descuentoLealtad));
+        venta.setDescuento(descuentoPuntos.add(descuentoLealtad));
         venta.setTotal(total);
 
         cliente.setPuntos(puntosDisponibles - puntosUtilizados + puntosGanados);

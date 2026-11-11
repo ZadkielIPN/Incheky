@@ -23,8 +23,12 @@ public class VentaResponse {
     private Long clienteId;
     private String clienteNombre;
     private List<DetalleVentaResponse> detalles;
+    private BigDecimal subtotal;
+    private BigDecimal descuentoPromociones;
+    private BigDecimal descuentoNivel;
+    private BigDecimal descuentoPuntos;
     private BigDecimal total;
-    private BigDecimal descuentoPorPuntos;
+    private BigDecimal descuento;
     private Integer puntosUtilizados;
     private Integer puntosGanados;
     private MetodoPago metodoPago;

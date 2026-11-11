@@ -48,8 +48,8 @@ public class Venta {
 
     @NotNull
     @DecimalMin(value = "0.00")
-    @Column(nullable = false, name = "descuento_por_puntos", precision = 10, scale = 2)
-    private BigDecimal descuentoPorPuntos = BigDecimal.ZERO;
+    @Column(nullable = false, name = "descuento", precision = 10, scale = 2)
+    private BigDecimal descuento = BigDecimal.ZERO;
 
     @NotNull
     @Min(0)

@@ -7,6 +7,7 @@ import org.handel.incheki.dtos.request.VentaRequest;
 import org.handel.incheki.dtos.UsuarioSession;
 import org.handel.incheki.dtos.response.VentaResponse;
 import org.handel.incheki.enums.Rol;
+import org.handel.incheki.exceptions.ResourcesNotFoundException;
 import org.handel.incheki.service.PDFService;
 import org.handel.incheki.service.VentaService;
 import org.springframework.data.domain.Page;
@@ -79,8 +80,17 @@ public class VentaController {
     }
 
     @GetMapping("/{id}/ticket")
-    public ResponseEntity<byte[]> descargarTicketPdf(@PathVariable Long id) {
+    public ResponseEntity<byte[]> descargarTicketPdf(@PathVariable Long id, HttpSession session) {
+        Object value = session.getAttribute("usuarioLogueado");
+        if (!(value instanceof UsuarioSession usuario)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
         VentaResponse venta = ventaService.findById(id);
+
+        if (usuario.getRol() == Rol.CLIENTE && !usuario.getId().equals(venta.getClienteId())) {
+            throw new ResourcesNotFoundException("Venta no encontrada.");
+        }
 
         byte[] pdfBytes = pdfService.generarTicketPdf(venta);
 

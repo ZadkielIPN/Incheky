@@ -2,12 +2,12 @@ package org.handel.incheki.service.impl;
 
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.handel.incheki.dtos.response.VentaResponse;
 import org.handel.incheki.service.EmailService;
 import org.handel.incheki.service.PDFService;
 import org.handel.incheki.service.VentaService;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.concurrent.CompletableFuture;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
@@ -47,10 +48,10 @@ public class EmailServiceImpl implements EmailService {
 
             mailSender.send(mimeMessage);
 
-            System.out.println("[Email Asíncrono] ¡Ticket enviado con éxito a: " + correoDestino + "!");
+            log.info("[Email Asíncrono] Ticket de la venta #{} enviado a {}", ventaId, correoDestino);
 
         } catch (Exception e) {
-            System.err.println("[Error] No se pudo enviar el ticket por correo: " + e.getMessage());
+            log.error("No se pudo enviar el ticket de la venta #{} a {}", ventaId, correoDestino, e);
         }
 
         return CompletableFuture.completedFuture(null);

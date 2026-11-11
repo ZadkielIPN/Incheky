@@ -130,7 +130,7 @@ create table ventas
 (
     id                   bigint auto_increment
         primary key,
-    descuento_por_puntos decimal(10, 2)                                        not null,
+    descuento decimal(10, 2)                                        not null,
     fecha                datetime(6)                                           not null,
     metodo_pago          enum ('EFECTIVO', 'OTRO', 'TARJETA', 'TRANSFERENCIA') not null,
     puntos_ganados       int                                                   not null,

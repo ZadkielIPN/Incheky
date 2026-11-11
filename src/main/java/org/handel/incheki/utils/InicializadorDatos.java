@@ -15,8 +15,6 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class InicializadorDatos implements CommandLineRunner {
-
-    // Administrador
     private final AdministradorRepository administradorRepository;
 
     @Override

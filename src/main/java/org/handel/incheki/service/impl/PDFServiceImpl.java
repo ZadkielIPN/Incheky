@@ -7,39 +7,41 @@ import com.lowagie.text.pdf.PdfWriter;
 import lombok.RequiredArgsConstructor;
 import org.handel.incheki.dtos.response.DetalleVentaResponse;
 import org.handel.incheki.dtos.response.VentaResponse;
+import org.handel.incheki.exceptions.ResourcesNotFoundException;
+import org.handel.incheki.model.Cliente;
+import org.handel.incheki.repository.ClienteRepository;
 import org.handel.incheki.service.PDFService;
 import org.springframework.stereotype.Service;
 
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.format.DateTimeFormatter;
 
 @Service
 @RequiredArgsConstructor
 public class PDFServiceImpl implements PDFService {
+    private final ClienteRepository clienteRepository;
 
     public byte[] generarTicketPdf(VentaResponse venta) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        // Margenes compactos tipo ticket / recibo (A5)
+        Cliente cliente = findClienteById(venta.getClienteId());
+
         Document document = new Document(PageSize.A5, 25, 25, 25, 25);
 
         try {
             PdfWriter.getInstance(document, baos);
             document.open();
 
-            // ----------------------------------------------------
-            // FUENTES Y COLORES CORPORATIVOS
-            // ----------------------------------------------------
             Font primaryFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 15, Color.DARK_GRAY);
             Font subtitleFont = FontFactory.getFont(FontFactory.HELVETICA, 10, Color.GRAY);
             Font boldFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 9, Color.BLACK);
             Font normalFont = FontFactory.getFont(FontFactory.HELVETICA, 9, Color.DARK_GRAY);
             Font headerTableFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 9, Color.WHITE);
+            Font promoFont = FontFactory.getFont(FontFactory.HELVETICA_OBLIQUE, 8, new Color(21, 128, 61));
 
-            // ----------------------------------------------------
-            // 1. ENCABEZADO
-            // ----------------------------------------------------
             Paragraph titulo = new Paragraph("INCHEKI STORE", primaryFont);
             titulo.setAlignment(Element.ALIGN_CENTER);
             document.add(titulo);
@@ -48,15 +50,11 @@ public class PDFServiceImpl implements PDFService {
             subtitulo.setAlignment(Element.ALIGN_CENTER);
             document.add(subtitulo);
 
-            document.add(new Paragraph(" ")); // Espacio
+            document.add(new Paragraph(" "));
 
-            // ----------------------------------------------------
-            // 2. DATOS GENERALES (Cajero limpio sin ID)
-            // ----------------------------------------------------
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
             String fechaFormateada = venta.getFecha() != null ? venta.getFecha().format(formatter) : "";
 
-            // Limpiamos el nombre del cajero por si trae formato tipo "6 - Juan Mercado"
             String cajeroLimpio = venta.getCajeroNombre() != null
                     ? venta.getCajeroNombre().replaceAll("^\\d+\\s*-\\s*", "")
                     : "N/A";
@@ -65,34 +63,34 @@ public class PDFServiceImpl implements PDFService {
             info.setFont(normalFont);
             info.add("Fecha: " + fechaFormateada + "\n");
             info.add("Cajero: " + cajeroLimpio + "\n");
-            info.add("Cliente: " + (venta.getClienteNombre() != null ? venta.getClienteNombre() : "Público General") + "\n");
+            String clienteLimpio = venta.getClienteNombre() != null
+                    ? venta.getClienteNombre().replaceAll("^\\d+\\s*-\\s*", "")
+                    : "Público General";
+            info.add("Cliente: " + clienteLimpio + "\n");
             info.add("Método de Pago: " + venta.getMetodoPago());
             document.add(info);
 
-            document.add(new Paragraph(" ")); // Espacio
+            document.add(new Paragraph(" "));
 
-            // ----------------------------------------------------
-            // 3. TABLA DE PRODUCTOS (Con Nombre en vez de ID)
-            // ----------------------------------------------------
-            PdfPTable table = new PdfPTable(4); // 4 Columnas: Cant, Producto, P.Unit, Subtotal
+            PdfPTable table = new PdfPTable(4);
             table.setWidthPercentage(100);
-            table.setWidths(new float[]{1f, 4f, 1.5f, 1.5f}); // Proporción de columnas
+            table.setWidths(new float[]{1f, 4f, 1.5f, 1.5f});
 
-            // Cabecera de la tabla con estilo elegante (Fondo oscuro, texto blanco)
             Color primaryColor = new Color(40, 40, 40);
 
             addCellHeader(table, "Cant", headerTableFont, primaryColor, Element.ALIGN_CENTER);
             addCellHeader(table, "Producto", headerTableFont, primaryColor, Element.ALIGN_LEFT);
-            addCellHeader(table, "P.Unit", headerTableFont, primaryColor, Element.ALIGN_RIGHT);
+            addCellHeader(table, "Precio Unitario", headerTableFont, primaryColor, Element.ALIGN_RIGHT);
             addCellHeader(table, "Subtotal", headerTableFont, primaryColor, Element.ALIGN_RIGHT);
 
-            // Filas de productos
             if (venta.getDetalles() != null) {
                 for (DetalleVentaResponse detalle : venta.getDetalles()) {
                     String nombreProd = detalle.getProductoNombre() != null ? detalle.getProductoNombre() : "Producto #" + detalle.getProductoId();
 
                     addCell(table, String.valueOf(detalle.getCantidad()), normalFont, Element.ALIGN_CENTER, false);
-                    addCell(table, nombreProd, normalFont, Element.ALIGN_LEFT, false);
+
+                    addProductCell(table, nombreProd, detalle, normalFont, promoFont);
+
                     addCell(table, "$" + detalle.getPrecioUnitario(), normalFont, Element.ALIGN_RIGHT, false);
                     addCell(table, "$" + detalle.getSubtotal(), normalFont, Element.ALIGN_RIGHT, false);
                 }
@@ -101,24 +99,25 @@ public class PDFServiceImpl implements PDFService {
             document.add(table);
             document.add(new Paragraph(" "));
 
-            // ----------------------------------------------------
-            // 4. TOTALES Y PUNTOS
-            // ----------------------------------------------------
             PdfPTable totalesTable = new PdfPTable(2);
             totalesTable.setWidthPercentage(100);
             totalesTable.setWidths(new float[]{6f, 2f});
 
-            addTotalRow(totalesTable, "Descuento por Puntos:", "-$" + venta.getDescuentoPorPuntos(), normalFont);
-            addTotalRow(totalesTable, "Puntos Utilizados:", String.valueOf(venta.getPuntosUtilizados()), normalFont);
+            addTotalRow(totalesTable, "Subtotal:", money(venta.getSubtotal()), normalFont);
+            addTotalRow(totalesTable, "Promociones aplicadas:", "-" + money(venta.getDescuentoPromociones()), normalFont);
+            addTotalRow(totalesTable, "Descuento por nivel de lealtad (" + cliente.getNivelLealtad().toString() + "):",
+                    "-" + money(venta.getDescuentoNivel()), normalFont);
+            addTotalRow(totalesTable,
+                    "Descuento por puntos (" + venta.getPuntosUtilizados() + "):",
+                    "-" + money(venta.getDescuentoPuntos()), normalFont);
+            addTotalRow(totalesTable, "TOTAL A PAGAR:", money(venta.getTotal()), boldFont);
             addTotalRow(totalesTable, "Puntos Ganados:", String.valueOf(venta.getPuntosGanados()), normalFont);
-            addTotalRow(totalesTable, "TOTAL A PAGAR:", "$" + venta.getTotal(), boldFont);
 
             document.add(totalesTable);
 
             document.add(new Paragraph(" "));
             document.add(new Paragraph(" "));
 
-            // Pie de página
             Paragraph footer = new Paragraph("¡Gracias por su compra en Incheki!", subtitleFont);
             footer.setAlignment(Element.ALIGN_CENTER);
             document.add(footer);
@@ -140,11 +139,31 @@ public class PDFServiceImpl implements PDFService {
         table.addCell(cell);
     }
 
+    private String money(BigDecimal value) {
+        BigDecimal safe = value != null ? value : BigDecimal.ZERO;
+        return "$" + safe.setScale(2, RoundingMode.HALF_UP).toPlainString();
+    }
+
+    private void addProductCell(PdfPTable table, String nombre, DetalleVentaResponse detalle, Font font, Font promoFont) {
+        PdfPCell cell = new PdfPCell();
+        cell.setPadding(5);
+        cell.setBorderColor(new Color(220, 220, 220));
+        cell.addElement(new Paragraph(nombre, font));
+
+        BigDecimal descuento = detalle.getDescuentoImporte();
+        if (descuento != null && descuento.signum() > 0) {
+            BigDecimal pct = detalle.getDescuentoPorcentaje() != null ? detalle.getDescuentoPorcentaje() : BigDecimal.ZERO;
+            cell.addElement(new Paragraph(
+                    "Promo -" + pct.stripTrailingZeros().toPlainString() + "% (-" + money(descuento) + ")", promoFont));
+        }
+        table.addCell(cell);
+    }
+
     private void addCell(PdfPTable table, String text, Font font, int alignment, boolean isBottomBorder) {
         PdfPCell cell = new PdfPCell(new Phrase(text, font));
         cell.setHorizontalAlignment(alignment);
         cell.setPadding(5);
-        cell.setBorderColor(new Color(220, 220, 220)); // Bordes sutiles grises
+        cell.setBorderColor(new Color(220, 220, 220));
         table.addCell(cell);
     }
 
@@ -161,5 +180,10 @@ public class PDFServiceImpl implements PDFService {
 
         table.addCell(cellLabel);
         table.addCell(cellValue);
+    }
+
+    private Cliente findClienteById(Long id) {
+        return clienteRepository.findById(id)
+                .orElseThrow(() -> new ResourcesNotFoundException("Cliente con id " + id + " no encontrado"));
     }
 }

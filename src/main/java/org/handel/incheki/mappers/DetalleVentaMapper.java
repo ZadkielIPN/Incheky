@@ -24,6 +24,7 @@ public interface DetalleVentaMapper {
     DetalleVenta toEntity(DetalleVentaRequest request);
 
     @Mapping(target = "productoId", source = "producto", qualifiedByName = "toProductoId")
+    @Mapping(target = "productoNombre", source = "producto.nombre")
     @Mapping(target = "promocionId", source = "promocion", qualifiedByName = "toPromocionId")
     DetalleVentaResponse toResponse(DetalleVenta entity);
 

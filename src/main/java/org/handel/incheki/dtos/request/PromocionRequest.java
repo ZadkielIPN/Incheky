@@ -28,7 +28,7 @@ public class PromocionRequest {
     @NotNull
     private LocalDate fechaInicio;
 
-    @PastOrPresent( message = "La fecha de finalización no puede ser una fecha pasada")
+    @Future( message = "La fecha de finalización no puede ser una fecha pasada")
     private LocalDate fechaFin;
 
     private boolean activa = true;
