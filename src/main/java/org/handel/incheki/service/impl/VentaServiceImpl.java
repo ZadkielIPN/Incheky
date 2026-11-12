@@ -5,6 +5,7 @@ import org.handel.incheki.dtos.UsuarioSession;
 import org.handel.incheki.dtos.request.DetalleVentaRequest;
 import org.handel.incheki.dtos.request.VentaRequest;
 import org.handel.incheki.dtos.response.VentaResponse;
+import org.handel.incheki.enums.MetodoPago;
 import org.handel.incheki.enums.Rol;
 import org.handel.incheki.exceptions.ResourcesNotFoundException;
 import org.handel.incheki.mappers.VentaMapper;
@@ -64,6 +65,8 @@ public class VentaServiceImpl implements VentaService {
         BigDecimal subtotalConPromociones = procesarDetallesVenta(venta);
 
         calcularTotalesYLealtad(venta, cliente, request.getPuntosUtilizados(), subtotalConPromociones);
+
+        registrarEfectivo(venta, request.getEfectivoRecibido());
 
         ventaRepository.save(venta);
         return ventaMapper.toResponse(venta);
@@ -227,6 +230,25 @@ public class VentaServiceImpl implements VentaService {
         venta.setTotal(total);
 
         cliente.setPuntos(puntosDisponibles - puntosUtilizados + puntosGanados);
+    }
+
+    /** En pagos en efectivo exige el monto recibido y calcula el cambio; en otros métodos no guarda nada. */
+    private void registrarEfectivo(Venta venta, BigDecimal efectivoRecibido) {
+        if (venta.getMetodoPago() != MetodoPago.EFECTIVO) {
+            venta.setEfectivoRecibido(null);
+            venta.setCambio(null);
+            return;
+        }
+        if (efectivoRecibido == null) {
+            throw new IllegalArgumentException("Indica el efectivo recibido.");
+        }
+        BigDecimal recibido = efectivoRecibido.setScale(2, RoundingMode.HALF_UP);
+        if (recibido.compareTo(venta.getTotal()) < 0) {
+            throw new IllegalArgumentException(
+                    "El efectivo recibido ($" + recibido + ") no cubre el total de la venta ($" + venta.getTotal() + ").");
+        }
+        venta.setEfectivoRecibido(recibido);
+        venta.setCambio(recibido.subtract(venta.getTotal()).setScale(2, RoundingMode.HALF_UP));
     }
 
     private Venta findVentaById(Long id) {

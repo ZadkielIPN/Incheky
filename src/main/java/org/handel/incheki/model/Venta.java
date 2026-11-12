@@ -65,4 +65,12 @@ public class Venta {
     @Column(nullable = false, name = "metodo_pago")
     @Enumerated(EnumType.STRING)
     private MetodoPago metodoPago;
+
+    @DecimalMin(value = "0.00")
+    @Column(name = "efectivo_recibido", precision = 10, scale = 2)
+    private BigDecimal efectivoRecibido;
+
+    @DecimalMin(value = "0.00")
+    @Column(name = "cambio", precision = 10, scale = 2)
+    private BigDecimal cambio;
 }

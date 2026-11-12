@@ -32,4 +32,6 @@ public class VentaResponse {
     private Integer puntosUtilizados;
     private Integer puntosGanados;
     private MetodoPago metodoPago;
+    private BigDecimal efectivoRecibido;
+    private BigDecimal cambio;
 }

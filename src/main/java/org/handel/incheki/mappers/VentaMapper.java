@@ -18,13 +18,14 @@ import java.math.RoundingMode;
         uses = {EntityReferenceMapper.class, DetalleVentaMapper.class}
 )
 public interface VentaMapper {
-
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "cajero", source = "cajeroId", qualifiedByName = "toCajero")
     @Mapping(target = "cliente", source = "clienteId", qualifiedByName = "toCliente")
     @Mapping(target = "total", ignore = true)
     @Mapping(target = "descuento", ignore = true)
     @Mapping(target = "puntosGanados", ignore = true)
+    @Mapping(target = "efectivoRecibido", ignore = true)
+    @Mapping(target = "cambio", ignore = true)
     Venta toEntityInternal(VentaRequest request);
 
     default Venta toEntity(VentaRequest request) {
@@ -42,6 +43,8 @@ public interface VentaMapper {
     @Mapping(target = "total", ignore = true)
     @Mapping(target = "descuento", ignore = true)
     @Mapping(target = "puntosGanados", ignore = true)
+    @Mapping(target = "efectivoRecibido", ignore = true)
+    @Mapping(target = "cambio", ignore = true)
     void updateInternal(VentaRequest request, @MappingTarget Venta venta);
 
     default void update(VentaRequest request, @MappingTarget Venta venta) {

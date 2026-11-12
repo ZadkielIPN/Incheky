@@ -121,6 +121,10 @@ public class PDFServiceImpl implements PDFService {
                     "Descuento por puntos (" + venta.getPuntosUtilizados() + "):",
                     "-" + money(venta.getDescuentoPuntos()), normalFont);
             addTotalRow(totalesTable, "TOTAL A PAGAR:", money(venta.getTotal()), boldFont);
+            if (venta.getEfectivoRecibido() != null) {
+                addTotalRow(totalesTable, "Efectivo recibido:", money(venta.getEfectivoRecibido()), normalFont);
+                addTotalRow(totalesTable, "Cambio:", money(venta.getCambio()), boldFont);
+            }
             addTotalRow(totalesTable, "Puntos Ganados:", String.valueOf(venta.getPuntosGanados()), normalFont);
 
             document.add(totalesTable);

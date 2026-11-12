@@ -1,5 +1,6 @@
 package org.handel.incheki.dtos.request;
 
+import jakarta.persistence.Column;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.handel.incheki.enums.MetodoPago;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -36,4 +38,8 @@ public class VentaRequest {
 
     @NotNull
     private MetodoPago metodoPago;
+
+    private BigDecimal efectivoRecibido;
+
+    private BigDecimal cambio;
 }
