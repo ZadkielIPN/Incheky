@@ -20,6 +20,7 @@ public class ProductoResponse {
     private String nombre;
     private String descripcion;
     private BigDecimal precio;
+    private BigDecimal peso;
     private Integer stock;
     private boolean activo;
     private String codigoBarras;
