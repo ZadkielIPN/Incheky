@@ -17,7 +17,7 @@ public interface ProductoService {
 
     Page<ProductoResponse> findCatalog(String q, Pageable pageable);
 
-    ProductoResponse update(Long id, ProductoRequest request);
+    ProductoResponse update(Long id, ProductoRequest request, MultipartFile file);
 
     void delete(Long id);
 }

@@ -46,8 +46,9 @@ public class ProductoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductoResponse> updateProducto(@PathVariable Long id, @Valid @RequestBody ProductoRequest request) {
-        ProductoResponse response = productoService.update(id, request);
+    public ResponseEntity<ProductoResponse> updateProducto(@PathVariable Long id, @Valid @RequestPart("producto") ProductoRequest request,
+                                                           @RequestPart(value = "file", required = false) MultipartFile file) {
+        ProductoResponse response = productoService.update(id, request, file);
         return ResponseEntity.ok(response);
     }
 

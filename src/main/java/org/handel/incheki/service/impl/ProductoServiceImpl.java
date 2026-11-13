@@ -87,8 +87,12 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Override
     @Transactional
-    public ProductoResponse update(Long id, ProductoRequest request) {
+    public ProductoResponse update(Long id, ProductoRequest request, MultipartFile file) {
         Producto producto = findProductoById(id);
+
+        if (file != null && !file.isEmpty()) {
+            request.setImagen(saveImage(file));
+        }
 
         productoMapper.update(request, producto);
 
