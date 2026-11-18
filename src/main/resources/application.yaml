@@ -44,6 +44,11 @@ server:
   port: 8080
   forward-headers-strategy: framework
 
+management:
+  health:
+    mail:
+      enabled: false
+
 springdoc:
   api-docs:
     enabled: true
