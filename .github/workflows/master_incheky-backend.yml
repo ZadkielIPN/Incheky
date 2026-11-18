@@ -1,3 +1,4 @@
+
 name: Build and deploy JAR app to Azure Web App - Incheky-Backend
 
 on:
@@ -11,10 +12,10 @@ jobs:
     runs-on: ubuntu-24.04
 
     steps:
-      - name: Checkout GitHub Action
+      - name: Checkout repository
         uses: actions/checkout@v5
 
-      - name: Set up Java
+      - name: Set up Java 25
         uses: actions/setup-java@v5
         with:
           java-version: '25'
@@ -23,3 +24,37 @@ jobs:
 
       - name: Build with Maven
         run: mvn clean package -DskipTests
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: java-app
+          path: target/*.jar
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: java-app
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_0C926E64EC694B299242711E4C56A8A7 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_BE09D67AFCFC488CA769D5E41C8D7B47 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_A27184B155DE4D5295ECA9B531C966C9 }}
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: Incheky-Backend
+          slot-name: Production
+          package: '*.jar'
