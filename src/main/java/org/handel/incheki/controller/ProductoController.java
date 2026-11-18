@@ -8,6 +8,7 @@ import org.handel.incheki.service.ProductoService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,11 +46,11 @@ public class ProductoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ProductoResponse> updateProducto(@PathVariable Long id, @Valid @RequestPart("producto") ProductoRequest request,
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<ProductoResponse> updateProducto(@PathVariable Long id,
+                                                           @Valid @RequestPart("producto") ProductoRequest request,
                                                            @RequestPart(value = "file", required = false) MultipartFile file) {
-        ProductoResponse response = productoService.update(id, request, file);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(productoService.update(id, request, file));
     }
 
     @DeleteMapping("/{id}")
