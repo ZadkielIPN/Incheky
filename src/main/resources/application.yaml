@@ -1,10 +1,16 @@
+
 spring:
   application:
     name: Incheky
+
   servlet:
     multipart:
       max-file-size: 5MB
       max-request-size: 5MB
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
 
   datasource:
     url: jdbc:mysql://${DB_HOST}:3306/${DB_NAME}?sslMode=REQUIRED&serverTimezone=America/Mexico_City
@@ -21,9 +27,11 @@ spring:
       ddl-auto: update
     show-sql: true
     open-in-view: false
+
   web:
     locale: es_MX
     locale-resolver: fixed
+
   mail:
     host: smtp.gmail.com
     port: 587
@@ -43,6 +51,11 @@ app:
 server:
   port: ${PORT:8080}
   forward-headers-strategy: framework
+  servlet:
+    session:
+      cookie:
+        same-site: none
+        secure: true
 
 management:
   health:
