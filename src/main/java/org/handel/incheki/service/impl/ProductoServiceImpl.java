@@ -1,3 +1,4 @@
+
 package org.handel.incheki.service.impl;
 
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,8 @@ import org.handel.incheki.mappers.ProductoMapper;
 import org.handel.incheki.model.Producto;
 import org.handel.incheki.repository.ProductoRepository;
 import org.handel.incheki.service.ProductoService;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,15 +22,19 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class ProductoServiceImpl implements ProductoService {
+
     private final ProductoRepository productoRepository;
     private final ProductoMapper productoMapper;
-    private static final Path CARPETA_IMAGENES = Path.of("uploads", "productos");
+
+    @Value("${app.upload.dir:uploads}")
+    private String uploadDir;
 
     @Override
     @Transactional
@@ -46,7 +53,6 @@ public class ProductoServiceImpl implements ProductoService {
     @Transactional(readOnly = true)
     public ProductoResponse findById(Long id) {
         Producto producto = findProductoById(id);
-
         return productoMapper.toResponse(producto);
     }
 
@@ -63,9 +69,10 @@ public class ProductoServiceImpl implements ProductoService {
         Page<Producto> productosPage;
 
         if (q != null && !q.isBlank()) {
-            productosPage = productoRepository.findByNombreContainingIgnoreCaseOrDescripcionContainingIgnoreCase(
-                    q, q, pageable
-            );
+            productosPage = productoRepository
+                    .findByNombreContainingIgnoreCaseOrDescripcionContainingIgnoreCase(
+                            q, q, pageable
+                    );
         } else {
             productosPage = productoRepository.findAll(pageable);
         }
@@ -76,11 +83,10 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     @Transactional(readOnly = true)
     public Page<ProductoResponse> findCatalog(String q, Pageable pageable) {
-        Page<Producto> productosPage;
-
-        productosPage = productoRepository.findCatalog(
+        Page<Producto> productosPage = productoRepository.findCatalog(
                 q == null || q.isBlank() ? null : q.trim(),
-                pageable);
+                pageable
+        );
 
         return productosPage.map(productoMapper::toResponse);
     }
@@ -104,28 +110,60 @@ public class ProductoServiceImpl implements ProductoService {
     @Transactional
     public void delete(Long id) {
         Producto producto = findProductoById(id);
-
         productoRepository.delete(producto);
     }
 
     private Producto findProductoById(Long id) {
         return productoRepository.findById(id)
-                .orElseThrow(() -> new ResourcesNotFoundException("Producto con id " + id + " no encontrado"));
+                .orElseThrow(() ->
+                        new ResourcesNotFoundException(
+                                "Producto con id " + id + " no encontrado"
+                        )
+                );
+    }
+
+    private Path getImageDirectory() {
+        return Paths.get(uploadDir, "productos")
+                .toAbsolutePath()
+                .normalize();
     }
 
     private String saveImage(MultipartFile archivo) {
         String tipo = archivo.getContentType();
+
         if (tipo == null || !tipo.startsWith("image/")) {
-            throw new IllegalArgumentException("El archivo debe ser una imagen.");
+            throw new IllegalArgumentException(
+                    "El archivo debe ser una imagen."
+            );
         }
+
         try {
-            Files.createDirectories(CARPETA_IMAGENES);
-            String original = StringUtils.cleanPath(Objects.requireNonNull(archivo.getOriginalFilename())).replaceAll("[^a-zA-Z0-9._-]", "_");
+            Path carpetaImagenes = getImageDirectory();
+
+            Files.createDirectories(carpetaImagenes);
+
+            String original = StringUtils.cleanPath(
+                    Objects.requireNonNull(archivo.getOriginalFilename())
+            ).replaceAll("[^a-zA-Z0-9._-]", "_");
+
             String nombre = UUID.randomUUID() + "_" + original;
-            archivo.transferTo(CARPETA_IMAGENES.resolve(nombre));
+
+            Path destino = carpetaImagenes.resolve(nombre).normalize();
+
+            if (!destino.startsWith(carpetaImagenes)) {
+                throw new IllegalArgumentException(
+                        "Nombre de archivo no válido."
+                );
+            }
+
+            archivo.transferTo(destino);
+
             return nombre;
+
         } catch (IOException e) {
-            throw new UncheckedIOException("No se pudo guardar la imagen", e);
+            throw new UncheckedIOException(
+                    "No se pudo guardar la imagen", e
+            );
         }
     }
 }
