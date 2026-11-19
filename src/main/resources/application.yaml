@@ -56,8 +56,8 @@ server:
   servlet:
     session:
       cookie:
-        same-site: none
-        secure: true
+        same-site: ${COOKIE_SAME_SITE:lax}
+        secure: ${COOKIE_SECURE:false}
 
 management:
   health:
