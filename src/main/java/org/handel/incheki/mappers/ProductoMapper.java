@@ -13,6 +13,7 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 public interface ProductoMapper {
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "costoPromedio", ignore = true)
     @Mapping(target = "promociones", source = "promocionIds", qualifiedByName = "toPromociones")
     Producto toEntity(ProductoRequest request);
 
@@ -21,6 +22,8 @@ public interface ProductoMapper {
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "stock", ignore = true)
+    @Mapping(target = "costoPromedio", ignore = true)
     @Mapping(target = "promociones", source = "promocionIds", qualifiedByName = "toPromociones")
     void update(ProductoRequest request, @MappingTarget Producto producto);
 }

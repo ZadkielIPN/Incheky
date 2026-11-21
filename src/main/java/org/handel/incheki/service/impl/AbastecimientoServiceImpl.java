@@ -12,10 +12,13 @@ import org.handel.incheki.repository.AbastecimientoRepository;
 import org.handel.incheki.repository.ProductoRepository;
 import org.handel.incheki.repository.ProveedorRepository;
 import org.handel.incheki.service.AbastecimientoService;
+import org.handel.incheki.service.InventoryCostService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -29,6 +32,7 @@ public class AbastecimientoServiceImpl implements AbastecimientoService {
     private final AbastecimientoMapper abastecimientoMapper;
     private final ProductoRepository productoRepository;
     private final ProveedorRepository proveedorRepository;
+    private final InventoryCostService inventoryCostService;
 
     @Override
     @Transactional
@@ -41,6 +45,8 @@ public class AbastecimientoServiceImpl implements AbastecimientoService {
 
         applyDetailsAndInventory(abastecimiento);
         abastecimientoRepository.save(abastecimiento);
+        abastecimientoRepository.flush();
+        inventoryCostService.rebuildCostsFromHistory();
 
         return abastecimientoMapper.toResponse(abastecimiento);
     }
@@ -71,6 +77,8 @@ public class AbastecimientoServiceImpl implements AbastecimientoService {
                 .orElseThrow(() -> new ResourcesNotFoundException(
                         "Proveedor con id " + request.getProveedorId() + " no encontrado")));
         applyDetailsAndInventory(abastecimiento);
+        abastecimientoRepository.flush();
+        inventoryCostService.rebuildCostsFromHistory();
 
         return abastecimientoMapper.toResponse(abastecimiento);
     }
@@ -81,6 +89,8 @@ public class AbastecimientoServiceImpl implements AbastecimientoService {
         Abastecimiento abastecimiento = findAbastecimientoById(id);
         restoreInventory(abastecimiento);
         abastecimientoRepository.delete(abastecimiento);
+        abastecimientoRepository.flush();
+        inventoryCostService.rebuildCostsFromHistory();
     }
 
     private void validateDetails(AbastecimientoRequest request) {
@@ -105,7 +115,19 @@ public class AbastecimientoServiceImpl implements AbastecimientoService {
                     .multiply(BigDecimal.valueOf(detalle.getCantidad()))
                     .setScale(2, RoundingMode.HALF_UP);
 
-            producto.setStock(producto.getStock() + detalle.getCantidad());
+            int stockAnterior = producto.getStock();
+            BigDecimal costoAnterior = producto.getCostoPromedio();
+            if (stockAnterior > 0 && costoAnterior == null) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT,
+                        "No se puede valorar el inventario existente de " + producto.getNombre() + ". Revisa su historial de abastecimientos.");
+            }
+            BigDecimal costoNuevo = stockAnterior == 0
+                    ? detalle.getCostoUnitario()
+                    : costoAnterior.multiply(BigDecimal.valueOf(stockAnterior))
+                            .add(detalle.getCostoUnitario().multiply(BigDecimal.valueOf(detalle.getCantidad())))
+                            .divide(BigDecimal.valueOf(stockAnterior + detalle.getCantidad()), 6, RoundingMode.HALF_UP);
+            producto.setCostoPromedio(costoNuevo.setScale(6, RoundingMode.HALF_UP));
+            producto.setStock(stockAnterior + detalle.getCantidad());
             detalle.setProducto(producto);
             detalle.setAbastecimiento(abastecimiento);
             detalle.setSubtotal(subtotal);

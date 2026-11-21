@@ -22,6 +22,5 @@ public class AbastecimientoRequest {
     @NotNull
     private Long proveedorId;
 
-    @Valid
-    private List<DetalleAbastecimientoRequest> detalles;
+    private List<@Valid DetalleAbastecimientoRequest> detalles;
 }

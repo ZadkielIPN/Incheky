@@ -9,4 +9,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface VentaRepository extends JpaRepository<Venta, Long> {
     Page<Venta> findByClienteId(Long clienteId, Pageable pageable);
+
+    java.util.List<Venta> findAllByOrderByFechaAscIdAsc();
+
+    java.util.List<Venta> findByFechaGreaterThanEqualAndFechaLessThanOrderByFechaAscIdAsc(
+            java.time.LocalDateTime inicio, java.time.LocalDateTime fin);
 }

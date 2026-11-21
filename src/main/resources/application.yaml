@@ -45,6 +45,8 @@ spring:
             enable: true
 
 app:
+  inventory-cost:
+    estimate-missing-costs: true
   cors:
     allowed-origins: "${CORS_ALLOWED_ORIGINS:http://localhost:4200}"
   upload:

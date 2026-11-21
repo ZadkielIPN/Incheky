@@ -6,4 +6,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AbastecimientoRepository extends JpaRepository<Abastecimiento, Long> {
+    java.util.List<Abastecimiento> findAllByOrderByFechaAscIdAsc();
+
+    java.util.List<Abastecimiento> findByFechaGreaterThanEqualAndFechaLessThanOrderByFechaAscIdAsc(
+            java.time.LocalDateTime inicio, java.time.LocalDateTime fin);
 }

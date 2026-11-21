@@ -45,6 +45,10 @@ public class DetalleVenta {
     @Column(nullable = false, name = "precio_unitario", precision = 10, scale = 2)
     private BigDecimal precioUnitario;
 
+    @DecimalMin(value = "0.00")
+    @Column(name = "costo_unitario", precision = 12, scale = 6)
+    private BigDecimal costoUnitario;
+
     @NotNull
     @DecimalMin(value = "0.00")
     @Column(nullable = false, precision = 10, scale = 2)

@@ -54,6 +54,9 @@ public class ApiAuthorizationInterceptor implements HandlerInterceptor {
     }
 
     private Set<Rol> allowedRoles(String path, String method) {
+        if (path.startsWith("/api/gastos") || path.startsWith("/api/reportes")) {
+            return Set.of(Rol.ADMINISTRADOR);
+        }
         if (path.startsWith("/api/auth/")) {
             return Set.of(Rol.CLIENTE, Rol.CAJERO, Rol.ADMINISTRADOR);
         }

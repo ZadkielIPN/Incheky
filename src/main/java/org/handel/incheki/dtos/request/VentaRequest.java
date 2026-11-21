@@ -1,6 +1,5 @@
 package org.handel.incheki.dtos.request;
 
-import jakarta.persistence.Column;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -29,8 +28,7 @@ public class VentaRequest {
     @NotNull
     private Long clienteId;
 
-    @Valid
-    private List<DetalleVentaRequest> detalles;
+    private List<@Valid DetalleVentaRequest> detalles;
 
     @NotNull
     @Min(0)

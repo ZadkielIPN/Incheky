@@ -15,11 +15,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
+
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -39,11 +43,16 @@ public class ProductoServiceImpl implements ProductoService {
     @Override
     @Transactional
     public ProductoResponse create(ProductoRequest request, MultipartFile file) {
+        if (request.getStock() != 0) {
+            throw new ResponseStatusException(BAD_REQUEST,
+                    "El inventario inicial debe registrarse como abastecimiento para conservar su costo.");
+        }
         if (file != null && !file.isEmpty()) {
             request.setImagen(saveImage(file));
         }
 
         Producto producto = productoMapper.toEntity(request);
+        producto.setCostoPromedio(BigDecimal.ZERO.setScale(6));
 
         productoRepository.save(producto);
         return productoMapper.toResponse(producto);

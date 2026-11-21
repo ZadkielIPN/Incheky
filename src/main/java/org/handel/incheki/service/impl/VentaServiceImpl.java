@@ -17,12 +17,16 @@ import org.handel.incheki.repository.VentaRepository;
 import org.handel.incheki.service.VentaService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -160,6 +164,10 @@ public class VentaServiceImpl implements VentaService {
             if (producto.getStock() < detalle.getCantidad()) {
                 throw new IllegalArgumentException("Stock insuficiente para " + producto.getNombre() + ".");
             }
+            if (producto.getCostoPromedio() == null) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT,
+                        "No hay costo histórico confiable para " + producto.getNombre() + ". Revisa su historial de abastecimientos.");
+            }
 
             BigDecimal subtotal = producto.getPrecio().multiply(BigDecimal.valueOf(detalle.getCantidad()));
 
@@ -177,6 +185,7 @@ public class VentaServiceImpl implements VentaService {
                     .producto(producto)
                     .cantidad(detalle.getCantidad())
                     .precioUnitario(producto.getPrecio())
+                    .costoUnitario(producto.getCostoPromedio().setScale(6, RoundingMode.HALF_UP))
                     .subtotal(subtotal)
                     .descuentoPorcentaje(porcentajePromo)
                     .descuentoImporte(descuento)
@@ -190,6 +199,7 @@ public class VentaServiceImpl implements VentaService {
         }
 
         venta.setDetalles(detallesProcesados);
+        venta.setFecha(LocalDateTime.now(ZoneId.of("America/Mexico_City")));
         return subtotalConPromociones;
     }
 
