@@ -86,12 +86,15 @@ public class InventoryCostServiceImpl implements InventoryCostService {
         }
 
         for (Balance balance : balances.values()) {
-            if (balance.unidades != balance.producto.getStock()) {
-                balance.producto.setCostoPromedio(null);
+            if (balance.unidades != balance.producto.getStock() || !balance.costoConocido) {
+                log.warn("No se pudo reconstruir el costo promedio del producto id={} ({}): "
+                                + "stock histórico={}, stock actual={}. Se conserva el costo registrado.",
+                        balance.producto.getId(), balance.producto.getNombre(),
+                        balance.unidades, balance.producto.getStock());
             } else if (balance.unidades == 0) {
                 balance.producto.setCostoPromedio(ZERO_COST);
             } else {
-                balance.producto.setCostoPromedio(balance.costoConocido ? balance.costoPromedio : null);
+                balance.producto.setCostoPromedio(balance.costoPromedio);
             }
         }
         if (estimateMissingCostsOnRebuild) {

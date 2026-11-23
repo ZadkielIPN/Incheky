@@ -49,8 +49,9 @@ public class Producto {
     @Min(value = 0)
     private Integer stock;
 
-    @Column(name = "costo_promedio", precision = 12, scale = 6)
-    private BigDecimal costoPromedio;
+    @Builder.Default
+    @Column(name = "costo_promedio", nullable = false, precision = 12, scale = 6)
+    private BigDecimal costoPromedio = BigDecimal.ZERO.setScale(6);
 
     @Column(nullable = false)
     private boolean activo = true;
