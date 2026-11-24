@@ -41,7 +41,7 @@ public class ApiAuthorizationInterceptor implements HandlerInterceptor {
         }
 
         Set<Rol> allowedRoles = allowedRoles(apiPath, request.getMethod());
-        if (!allowedRoles.isEmpty() && !allowedRoles.contains(user.getRol())) {
+        if (allowedRoles.isEmpty() || !allowedRoles.contains(user.getRol())) {
             throw new ResponseStatusException(FORBIDDEN, "No tienes permisos para realizar esta operación");
         }
         return true;
