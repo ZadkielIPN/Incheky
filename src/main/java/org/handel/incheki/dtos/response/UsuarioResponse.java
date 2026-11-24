@@ -17,4 +17,5 @@ public class UsuarioResponse {
     private String apellido;
     private String email;
     private Rol rol;
+    private String uidNfc;
 }

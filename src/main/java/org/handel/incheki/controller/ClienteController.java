@@ -29,6 +29,12 @@ public class ClienteController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/tarjeta-nfc")
+    public ResponseEntity<ClienteResponse> getClienteByTarjetaNfc(@RequestParam String uidNfc) {
+        ClienteResponse response = clienteService.findByUidNfc(uidNfc);
+        return ResponseEntity.ok(response);
+    }
+
     /*
     @PostMapping
     public ResponseEntity<ClienteResponse> createCliente(@Valid @RequestBody ClienteCreateRequest request) {

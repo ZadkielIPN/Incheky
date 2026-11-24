@@ -32,6 +32,12 @@ public class CajeroController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/tarjeta-nfc")
+    public ResponseEntity<CajeroResponse> getCajeroByTarjetaNfc(@RequestParam String uidNfc) {
+        CajeroResponse response = cajeroService.findByUidNfc(uidNfc);
+        return ResponseEntity.ok(response);
+    }
+
     @PostMapping
     public ResponseEntity<CajeroResponse> createCajero(@Valid @RequestBody CajeroCreateRequest request) {
         CajeroResponse response = cajeroService.create(request);

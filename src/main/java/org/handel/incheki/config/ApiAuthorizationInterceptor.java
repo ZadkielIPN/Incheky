@@ -49,6 +49,7 @@ public class ApiAuthorizationInterceptor implements HandlerInterceptor {
 
     private boolean isPublicAuthEndpoint(String path) {
         return "/api/auth/login".equals(path)
+                || "/api/auth/login/nfc".equals(path)
                 || "/api/auth/register".equals(path)
                 || "/api/auth/logout".equals(path);
     }
@@ -62,6 +63,9 @@ public class ApiAuthorizationInterceptor implements HandlerInterceptor {
         }
         if (path.startsWith("/api/promociones") && isRead(method)) {
             return Set.of(Rol.ADMINISTRADOR, Rol.CAJERO);
+        }
+        if (path.equals("/api/cajeros/tarjeta-nfc") && isRead(method)) {
+            return Set.of(Rol.ADMINISTRADOR);
         }
         if (path.startsWith("/api/administradores")
                 || path.startsWith("/api/cajeros")

@@ -42,4 +42,7 @@ public abstract class Usuario {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Rol rol;
+
+    @Column(name = "uid_nfc", unique = true)
+    private String uidNfc;
 }

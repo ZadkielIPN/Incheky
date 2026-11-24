@@ -13,6 +13,8 @@ public interface CajeroService {
 
     Page<CajeroResponse> findAll(String query, Pageable pageable);
 
+    CajeroResponse findByUidNfc(String uidNfc);
+
     CajeroResponse update(Long id, CajeroUpdateRequest request);
 
     void delete(Long id);

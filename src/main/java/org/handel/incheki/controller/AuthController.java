@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.handel.incheki.dtos.UsuarioSession;
 import org.handel.incheki.dtos.request.ClienteCreateRequest;
 import org.handel.incheki.dtos.request.LoginRequest;
+import org.handel.incheki.dtos.request.LoginNfcRequest;
 import org.handel.incheki.dtos.request.UsuarioProfileRequest;
 import org.handel.incheki.dtos.response.UsuarioResponse;
 import org.handel.incheki.service.ClienteService;
@@ -27,6 +28,15 @@ public class AuthController {
 
         session.setAttribute("usuarioLogueado", usuario);
 
+        return ResponseEntity.ok(usuario);
+    }
+
+    @PostMapping("/login/nfc")
+    public ResponseEntity<UsuarioSession> loginNfc(
+            @Valid @RequestBody LoginNfcRequest request,
+            HttpSession session) {
+        UsuarioSession usuario = usuarioService.loginNfc(request.getUidNfc());
+        session.setAttribute("usuarioLogueado", usuario);
         return ResponseEntity.ok(usuario);
     }
 

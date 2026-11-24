@@ -33,6 +33,18 @@ public class WebExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
 
+    @ExceptionHandler(UidNfcDuplicadoException.class)
+    public ResponseEntity<ErrorResponse> handleUidNfcDuplicado(UidNfcDuplicadoException ex, HttpServletRequest request) {
+        ErrorResponse error = new ErrorResponse(LocalDateTime.now(), HttpStatus.CONFLICT.value(), ex.getMessage(), request.getRequestURI(), null);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    @ExceptionHandler(UidNfcInvalidoException.class)
+    public ResponseEntity<ErrorResponse> handleUidNfcInvalido(UidNfcInvalidoException ex, HttpServletRequest request) {
+        ErrorResponse error = new ErrorResponse(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), ex.getMessage(), request.getRequestURI(), null);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
+
     @ExceptionHandler(MethodNotAllowedException.class)
     public ResponseEntity<ErrorResponse> handleMethodNotAllowed(MethodNotAllowedException ex, HttpServletRequest request) {
         ErrorResponse error = new ErrorResponse(LocalDateTime.now(), HttpStatus.METHOD_NOT_ALLOWED.value(), ex.getMessage(), request.getRequestURI(), null);

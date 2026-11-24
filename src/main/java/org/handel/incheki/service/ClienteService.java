@@ -13,6 +13,8 @@ public interface ClienteService {
 
     Page<ClienteResponse> findAll(String query, Pageable pageable);
 
+    ClienteResponse findByUidNfc(String uidNfc);
+
     ClienteResponse update(Long id, ClienteUpdateRequest request);
 
     void delete(Long id);

@@ -93,6 +93,13 @@ public class VentaServiceImpl implements VentaService {
 
     @Override
     @Transactional(readOnly = true)
+    public Page<VentaResponse> findAll(String query, Pageable pageable) {
+        return ventaRepository.search(query.trim(), pageable)
+                .map(ventaMapper::toResponse);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Page<VentaResponse> findByClienteId(Long clienteId, Pageable pageable) {
         return ventaRepository.findByClienteId(clienteId, pageable)
                 .map(ventaMapper::toResponse);

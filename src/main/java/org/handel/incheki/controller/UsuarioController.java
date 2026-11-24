@@ -1,6 +1,8 @@
 package org.handel.incheki.controller;
 
 import lombok.RequiredArgsConstructor;
+import jakarta.validation.Valid;
+import org.handel.incheki.dtos.request.TarjetaNfcRequest;
 import org.handel.incheki.dtos.response.UsuarioResponse;
 import org.handel.incheki.enums.Rol;
 import org.handel.incheki.service.UsuarioService;
@@ -26,6 +28,14 @@ public class UsuarioController {
                                                                 @RequestParam(required = false) String q,
                                                                 Pageable pageable) {
         Page<UsuarioResponse> response = usuarioService.findAll(rol, q, pageable);
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/{id}/tarjeta-nfc")
+    public ResponseEntity<UsuarioResponse> asignarTarjetaNfc(
+            @PathVariable Long id,
+            @Valid @RequestBody TarjetaNfcRequest request) {
+        UsuarioResponse response = usuarioService.asignarTarjetaNfc(id, request.getUidNfc());
         return ResponseEntity.ok(response);
     }
 

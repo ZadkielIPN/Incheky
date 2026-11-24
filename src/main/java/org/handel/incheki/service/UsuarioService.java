@@ -15,6 +15,10 @@ public interface UsuarioService {
 
     UsuarioSession login(String email, String password);
 
+    UsuarioSession loginNfc(String uidNfc);
+
+    UsuarioResponse asignarTarjetaNfc(Long id, String uidNfc);
+
     UsuarioResponse updateProfile(Long id, UsuarioProfileRequest request);
 
     void delete(Long id);

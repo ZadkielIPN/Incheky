@@ -33,8 +33,12 @@ public class VentaController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<VentaResponse>> getAllVentas(Pageable pageable) {
-        Page<VentaResponse> response = ventaService.findAll(pageable);
+    public ResponseEntity<Page<VentaResponse>> getAllVentas(
+            @RequestParam(required = false) String q,
+            Pageable pageable) {
+        Page<VentaResponse> response = q == null || q.isBlank()
+                ? ventaService.findAll(pageable)
+                : ventaService.findAll(q.trim(), pageable);
         return ResponseEntity.ok(response);
     }
 

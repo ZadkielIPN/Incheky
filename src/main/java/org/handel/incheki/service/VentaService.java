@@ -15,6 +15,8 @@ public interface VentaService {
 
     Page<VentaResponse> findAll(Pageable pageable);
 
+    Page<VentaResponse> findAll(String query, Pageable pageable);
+
     Page<VentaResponse> findByClienteId(Long clienteId, Pageable pageable);
 
     VentaResponse update(Long id, VentaRequest request);
