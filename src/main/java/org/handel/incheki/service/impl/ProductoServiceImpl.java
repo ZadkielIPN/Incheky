@@ -84,8 +84,8 @@ public class ProductoServiceImpl implements ProductoService {
 
         if (q != null && !q.isBlank()) {
             productosPage = productoRepository
-                    .findByNombreContainingIgnoreCaseOrDescripcionContainingIgnoreCase(
-                            q, q, pageable
+                    .findByNombreContainingIgnoreCaseOrDescripcionContainingIgnoreCaseOrCodigoBarrasContainingIgnoreCase(
+                            q.trim(), q.trim(), q.trim(), pageable
                     );
         } else {
             productosPage = productoRepository.findAll(pageable);

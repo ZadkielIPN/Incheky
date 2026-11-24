@@ -32,7 +32,7 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
             """)
     Page<Producto> findCatalog(@Param("q") String q, Pageable pageable);
 
-    Page<Producto> findByNombreContainingIgnoreCaseOrDescripcionContainingIgnoreCase(
-            String nombre, String descripcion, Pageable pageable
+    Page<Producto> findByNombreContainingIgnoreCaseOrDescripcionContainingIgnoreCaseOrCodigoBarrasContainingIgnoreCase(
+            String nombre, String descripcion, String codigoBarras, Pageable pageable
     );
 }
