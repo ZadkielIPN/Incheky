@@ -2,11 +2,13 @@ package org.handel.incheki.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.handel.incheki.dtos.request.ClienteCreateRequest;
 import org.handel.incheki.dtos.request.ClienteUpdateRequest;
 import org.handel.incheki.dtos.response.ClienteResponse;
 import org.handel.incheki.service.ClienteService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,13 +37,11 @@ public class ClienteController {
         return ResponseEntity.ok(response);
     }
 
-    /*
     @PostMapping
     public ResponseEntity<ClienteResponse> createCliente(@Valid @RequestBody ClienteCreateRequest request) {
         ClienteResponse response = clienteService.create(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
-     */
 
     @PutMapping("/{id}")
     public ResponseEntity<ClienteResponse> updateCliente(@PathVariable Long id, @Valid @RequestBody ClienteUpdateRequest request) {
