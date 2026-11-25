@@ -83,6 +83,17 @@ class ApiAuthorizationInterceptorTest {
     }
 
     @Test
+    void soloAdministradorPuedeEjecutarAjusteDeCostosDePrueba() {
+        ResponseStatusException exception = assertThrows(
+                ResponseStatusException.class,
+                () -> preHandle("POST", "/api/reportes/ajustar-costos-datos-prueba-margen", Rol.CAJERO));
+
+        assertTrue(exception.getStatusCode().isSameCodeAs(HttpStatus.FORBIDDEN));
+        assertDoesNotThrow(() ->
+                preHandle("POST", "/api/reportes/ajustar-costos-datos-prueba-margen", Rol.ADMINISTRADOR));
+    }
+
+    @Test
     void deniegaRutasApiSinPoliticaExplicita() {
         ResponseStatusException exception = assertThrows(
                 ResponseStatusException.class,

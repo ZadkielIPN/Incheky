@@ -1,6 +1,8 @@
 -- SOLO PARA DATOS DE PRUEBA.
 -- Estima costo = 80% del precio/ingreso para simular un margen bruto aproximado del 20%.
 -- No es un costo real ni debe ejecutarse sobre datos contables o ventas reales.
+-- Reemplaza el costo promedio de todos los productos con precio positivo y el costo
+-- histórico de todas las líneas de ventas elegibles, aunque ya tengan un costo.
 -- Haz un respaldo antes de ejecutarlo.
 
 DROP TEMPORARY TABLE IF EXISTS costos_estimados_venta_prueba;
@@ -20,14 +22,12 @@ JOIN (
 
 START TRANSACTION;
 
--- Reemplaza la estimación anterior (costo nulo, cero o igual al precio de lista).
--- Preserva costos que no coinciden con ese patrón.
+-- Reemplaza todos los costos promedio para que reflejen los precios corregidos.
 UPDATE productos
 SET costo_promedio = ROUND(precio * 0.80, 6)
-WHERE precio > 0
-  AND (costo_promedio IS NULL OR costo_promedio = 0 OR costo_promedio = precio);
+WHERE precio > 0;
 
--- Ajusta solo costos históricos nulos, cero o iguales al precio unitario.
+-- Reemplaza el costo histórico de todas las líneas elegibles.
 -- Distribuye el 80% del ingreso neto de cada venta entre sus detalles,
 -- incluyendo descuentos de líneas y descuentos globales registrados en ventas.total.
 UPDATE detalles_venta AS d
@@ -38,9 +38,7 @@ SET d.costo_unitario = ROUND(
         6
     )
 WHERE e.venta_total > 0
-  AND e.subtotal_lineas_venta > 0
-  AND (d.costo_unitario IS NULL OR d.costo_unitario = 0
-       OR d.costo_unitario = d.precio_unitario);
+  AND e.subtotal_lineas_venta > 0;
 
 COMMIT;
 
